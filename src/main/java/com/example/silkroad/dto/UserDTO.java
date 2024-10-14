@@ -1,4 +1,4 @@
 package com.example.silkroad.dto;
 
-public class User {
+public class UserDTO {
 }
