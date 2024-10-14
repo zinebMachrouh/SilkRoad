@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SilkRoad</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:insert="fragments/header :: header"></div>
+
+<div class="content">
+    <div th:replace="${content}"></div>
+</div>
+
+</body>
+</html>
