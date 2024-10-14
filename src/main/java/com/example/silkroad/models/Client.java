@@ -1,4 +1,68 @@
 package com.example.silkroad.models;
 
+import com.example.silkroad.models.enums.PaymentMethod;
+import com.example.silkroad.models.enums.UserRole;
+
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import java.util.UUID;
+
 public class Client extends User{
+    @Column(name = "shipping_address", nullable = false)
+    private String shippingAddress;
+
+    @Column(name = "payment_method", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    @Column(name = "points", nullable = false)
+    private int points;
+
+    public Client() {
+    }
+
+    public Client(String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(name, email, password, UserRole.CLIENT);
+        this.shippingAddress = shippingAddress;
+        this.paymentMethod = paymentMethod;
+        this.points = points;
+    }
+
+    public Client(UUID id, String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(id, name, email, password, UserRole.CLIENT);
+        this.shippingAddress = shippingAddress;
+        this.paymentMethod = paymentMethod;
+        this.points = points;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ",shippingAddress=" + shippingAddress +
+                ",paymentMethod=" + paymentMethod +
+                ",points=" + points +
+                "} ";
+    }
 }
