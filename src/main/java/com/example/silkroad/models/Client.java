@@ -24,15 +24,15 @@ public class Client extends User{
     public Client() {
     }
 
-    public Client(String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(name, email, password, UserRole.CLIENT);
+    public Client(String name, String email, String password,String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(name, email, password, salt, UserRole.CLIENT);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
     }
 
-    public Client(UUID id, String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(id, name, email, password, UserRole.CLIENT);
+    public Client(UUID id, String name, String email, String password,String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(id, name, email, password,salt,  UserRole.CLIENT);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
