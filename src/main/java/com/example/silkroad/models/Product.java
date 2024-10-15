@@ -1,6 +1,6 @@
 package com.example.silkroad.models;
 
-import org.hibernate.validator.constraints.Length;
+//import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,11 +16,11 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id; // Changed from int to UUID
 
-    @Length(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
+    //@Length(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Length(max = 1000, message = "Description must be less than 1000 characters")
+    //@Length(max = 1000, message = "Description must be less than 1000 characters")
     @Column(name = "description", length = 1000)
     private String description;
 
