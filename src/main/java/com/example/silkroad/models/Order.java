@@ -7,14 +7,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;
@@ -35,11 +36,20 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
+    // Default constructor
     public Order() {
     }
 
-    public Order(int id, LocalDate orderDate, OrderStatus status, Client client) {
+    // Constructor with id
+    public Order(UUID id, LocalDate orderDate, OrderStatus status, Client client) {
         this.id = id;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.client = client;
+    }
+
+    // Constructor without id
+    public Order(LocalDate orderDate, OrderStatus status, Client client) {
         this.orderDate = orderDate;
         this.status = status;
         this.client = client;
@@ -47,11 +57,11 @@ public class Order implements Serializable {
 
     // Getters and Setters
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

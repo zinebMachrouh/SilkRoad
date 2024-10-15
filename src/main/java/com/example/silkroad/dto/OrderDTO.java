@@ -7,9 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class OrderDTO {
-    private int id;
+    private UUID id;
     private LocalDate orderDate;
     private String status;
     private ClientDTO client;
@@ -18,7 +19,7 @@ public class OrderDTO {
     public OrderDTO() {
     }
 
-    public OrderDTO(int id, LocalDate orderDate, String status, ClientDTO client) {
+    public OrderDTO(UUID id, LocalDate orderDate, String status, ClientDTO client) {
         this.id = id;
         this.orderDate = orderDate;
         this.status = status;
@@ -27,11 +28,11 @@ public class OrderDTO {
 
     // Getters and Setters
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -91,14 +92,14 @@ public class OrderDTO {
         order.setId(this.id);
         order.setOrderDate(this.orderDate);
         order.setStatus(OrderStatus.valueOf(this.status));
-//        order.setClient(this.client.dtoToModel());
+        order.setClient(this.client.dtoToModel());
         this.products.forEach(productDTO -> order.getProducts().add(productDTO.dtoToModel()));
         return order;
     }
 
-//    public static OrderDTO modelToDTO(Order order) {
-//        OrderDTO orderDTO = new OrderDTO(order.getId(), order.getOrderDate(), order.getStatus().name(), ClientDTO.modelToDTO(order.getClient()));
-//        order.getProducts().forEach(product -> orderDTO.getProducts().add(ProductDTO.modelToDTO(product)));
-//        return orderDTO;
-//    }
+    public static OrderDTO modelToDTO(Order order) {
+        OrderDTO orderDTO = new OrderDTO(order.getId(), order.getOrderDate(), order.getStatus().name(), ClientDTO.modelToDTO(order.getClient()));
+        order.getProducts().forEach(product -> orderDTO.getProducts().add(ProductDTO.modelToDTO(product)));
+        return orderDTO;
+    }
 }

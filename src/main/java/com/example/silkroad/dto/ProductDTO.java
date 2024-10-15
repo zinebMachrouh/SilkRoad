@@ -5,9 +5,10 @@ import com.example.silkroad.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ProductDTO {
-    private int id;
+    private UUID id;
     private String name;
     private String description;
     private double price;
@@ -18,7 +19,7 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(int id, String name, String description, double price, int stock, String image) {
+    public ProductDTO(UUID id, String name, String description, double price, int stock, String image) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,11 +30,11 @@ public class ProductDTO {
 
     // Getters and Setters
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -118,9 +119,9 @@ public class ProductDTO {
         return product;
     }
 
-//    public static ProductDTO modelToDTO(Product product) {
-//        ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getImage());
-//        product.getOrders().forEach(order -> productDTO.getOrders().add(OrderDTO.modelToDTO(order)));
-//        return productDTO;
-//    }
+    public static ProductDTO modelToDTO(Product product) {
+        ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getImage());
+        product.getOrders().forEach(order -> productDTO.getOrders().add(OrderDTO.modelToDTO(order)));
+        return productDTO;
+    }
 }

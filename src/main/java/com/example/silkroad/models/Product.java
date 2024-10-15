@@ -7,14 +7,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id; // Changed from int to UUID
 
     @Length(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     @Column(name = "name", nullable = false, length = 100)
@@ -40,11 +41,22 @@ public class Product implements Serializable {
     @ManyToMany(mappedBy = "products")
     private List<Order> orders = new ArrayList<>();
 
+    // Default constructor
     public Product() {
     }
 
-    public Product(int id, String name, String description, double price, int stock, String image) {
+    // Constructor with id
+    public Product(UUID id, String name, String description, double price, int stock, String image) {
         this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.image = image;
+    }
+
+    // Constructor without id
+    public Product(String name, String description, double price, int stock, String image) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -54,11 +66,11 @@ public class Product implements Serializable {
 
     // Getters and Setters
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

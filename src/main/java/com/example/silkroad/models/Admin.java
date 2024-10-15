@@ -2,9 +2,12 @@ package com.example.silkroad.models;
 
 import com.example.silkroad.models.enums.UserRole;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Table(name = "admins") 
+@DiscriminatorValue("ADMIN")
 public class Admin extends User{
     @Column(name = "is_super_admin", nullable = false)
     private boolean isSuperAdmin;
