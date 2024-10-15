@@ -1,8 +1,5 @@
 package com.example.silkroad.models;
 
-import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,24 +14,18 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id; // Changed from int to UUID
 
-    @Length(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Length(max = 1000, message = "Description must be less than 1000 characters")
     @Column(name = "description", length = 1000)
     private String description;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
-    @Digits(integer = 10, fraction = 2, message = "Price must be a valid decimal number")
     @Column(name = "price", nullable = false)
     private double price;
 
-    @Min(value = 0, message = "Stock cannot be negative")
     @Column(name = "stock")
     private int stock;
 
-    @Length(max = 255, message = "Image URL must be less than 255 characters")
     @Column(name = "image", length = 255)
     private String image;
 
