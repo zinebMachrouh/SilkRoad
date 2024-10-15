@@ -1,6 +1,5 @@
 package com.example.silkroad.models;
 
-import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -25,17 +24,17 @@ public class Product implements Serializable {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
-    @Digits(integer = 10, fraction = 2, message = "Price must be a valid decimal number")
+//    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+//    @Digits(integer = 10, fraction = 2, message = "Price must be a valid decimal number")
     @Column(name = "price", nullable = false)
     private double price;
 
-    @Min(value = 0, message = "Stock cannot be negative")
+//    @Min(value = 0, message = "Stock cannot be negative")
     @Column(name = "stock")
     private int stock;
 
-    @Length(max = 255, message = "Image URL must be less than 255 characters")
-    @Column(name = "image", length = 255)
+//    @Length(max = 255, message = "Image URL must be less than 255 characters")
+//    @Column(name = "image", length = 255)
     private String image;
 
     @ManyToMany(mappedBy = "products")
