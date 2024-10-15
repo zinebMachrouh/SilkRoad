@@ -3,11 +3,13 @@ package com.example.silkroad.models;
 import com.example.silkroad.models.enums.PaymentMethod;
 import com.example.silkroad.models.enums.UserRole;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.util.UUID;
 
+
+@Entity
+@Table(name = "clients")
+@DiscriminatorValue("CLIENT")
 public class Client extends User{
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
