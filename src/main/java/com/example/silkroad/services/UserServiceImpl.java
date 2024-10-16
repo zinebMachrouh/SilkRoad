@@ -1,5 +1,6 @@
 package com.example.silkroad.services;
 
+import com.example.silkroad.models.Admin;
 import com.example.silkroad.models.User;
 import com.example.silkroad.models.enums.UserRole;
 import com.example.silkroad.repositories.interfaces.AdminRepository;
@@ -7,6 +8,7 @@ import com.example.silkroad.repositories.interfaces.ClientRepository;
 import com.example.silkroad.repositories.interfaces.UserRepository;
 import com.example.silkroad.services.interfaces.UserService;
 import com.example.silkroad.utils.PasswordUtil;
+import javax.servlet.http.HttpSession;
 
 import java.sql.SQLException;
 import java.util.Base64;
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String email, String password) throws SQLException {
+    public User login(String email, String password,HttpSession session) throws SQLException {
         validateInput(email, password);
 
         User user = userRepository.getUser(email, password);
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (isPasswordValid(user, password)) {
-            return fetchUserByRole(user, email);
+            return fetchUserByRole(user, email, session);
         } else {
             throw new SQLException("Invalid password");
         }
@@ -56,10 +58,11 @@ public class UserServiceImpl implements UserService {
         return hashedPassword.equals(user.getPassword());
     }
 
-    private User fetchUserByRole(User user, String email) throws SQLException {
+    private User fetchUserByRole(User user, String email, HttpSession session) throws SQLException {
         switch (user.getRole()) {
             case ADMIN:
-                return adminRepository.getAdminByEmail(email);
+                Admin admin = adminRepository.getAdminByEmail(email);
+                session.setAttribute("loggedUser", admin);
             case CLIENT:
                 return clientRepository.getClientByEmail(email);
             default:

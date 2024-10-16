@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div th:insert="fragments/header :: header"></div>
+<div th:replace="fragments/header :: header"></div>
 
 <div class="content">
     <div th:replace="${content}"></div>
