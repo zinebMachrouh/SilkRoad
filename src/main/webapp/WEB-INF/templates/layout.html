@@ -3,12 +3,18 @@
 <head>
     <title>SilkRoad</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        body{
+            background-color: blue;
+        }
+    </style>
 </head>
 <body>
 
 <div th:replace="fragments/header :: header"></div>
 
 <div class="content">
+    <h4>Yoooo Mac</h4>
     <div th:replace="${content}"></div>
 </div>
 

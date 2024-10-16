@@ -2,10 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home</title>
+    <link rel="stylesheet" th:href="@{./css/style.css}"/>
+    <style>
+        /*body{
+            background-color: green;
+        }*/
+    </style>
 </head>
 <body>
 
-<div th:replace="layout :: content">
+<div>
     <h4 th:text="${message}"></h4>
 </div>
 

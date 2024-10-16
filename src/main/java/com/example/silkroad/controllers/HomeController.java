@@ -24,7 +24,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
-        ctx.setVariable("message", "Hello from Thymeleaf in JEE!");
+        ctx.setVariable("message", "Hello MAC");
 
         resp.setContentType("text/html;charset=UTF-8");
         templateEngine.process("home", ctx, resp.getWriter());
