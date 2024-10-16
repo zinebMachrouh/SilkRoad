@@ -21,5 +21,9 @@
         <property name="hibernate.cache.use_query_cache">true</property>
         <property name="hibernate.cache.use_second_level_cache">true</property>
 
+        <mapping class="com.example.silkroad.models.User"/>
+        <mapping class="com.example.silkroad.models.Admin"/>
+        <mapping class="com.example.silkroad.models.Client"/>
+
     </session-factory>
 </hibernate-configuration>

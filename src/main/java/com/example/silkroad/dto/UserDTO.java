@@ -10,23 +10,26 @@ public class UserDTO {
     private String name;
     private String email;
     private String password;
+    private String salt;
     private UserRole role;
 
     public UserDTO() {
     }
 
-    public UserDTO(String name, String email, String password, UserRole role) {
+    public UserDTO(String name, String email, String password, String salt, UserRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.role = role;
     }
 
-    public UserDTO(UUID id, String name, String email, String password, UserRole role) {
+    public UserDTO(UUID id, String name, String email, String password, String salt, UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.role = role;
     }
 
@@ -65,6 +68,13 @@ public class UserDTO {
         this.role = role;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -76,9 +86,9 @@ public class UserDTO {
     }
 
     public User dtoToModel() {
-        return new User(this.id, this.name, this.email, this.password, this.role);
+        return new User(this.id, this.name, this.email, this.password, this.salt, this.role);
     }
     public UserDTO modelToDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getSalt(), user.getPassword(), user.getRole());
     }
 }
