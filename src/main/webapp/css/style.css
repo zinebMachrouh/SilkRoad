@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.article {
+    overflow: hidden;
+    height: 100vh;
+}
+
+:root {
+    --side: #faca50ff;
+    --jet: #161a1dff;
+    --black: #1d2025ff;
+    --med-black: #22272bff;
+    --light-black: #2a3034ff;
+    --white: #f9f9f9ff;
+    --light: #f1cfeeff;
+    --med: #e297dcff;
+    --hover: #d878d2ff;
+    --main: #d167cbff;
+    --dark: #A85AA6;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--black);
+    padding: 20px 150px;
+
+    h2 {
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        img {
+            width: 32px;
+        }
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+
+        a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+        }
+    }
+    .actions{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        a {
+            text-decoration: none;
+            font-weight: 500;
+
+            &:first-child{
+                background-color: transparent;
+                padding: 7px 30px;
+                border-radius: 5px;
+                color: var(--white);
+                border: 2px solid var(--white);
+            }
+
+            &:last-child{
+                background-color: var(--main);
+                padding: 7px 30px;
+                border-radius: 5px;
+                color: var(--black);
+            }
+        }
+
+    }
+}
+
+
+#hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--black);
+    height: 93vh;
+    padding: 0px 150px;
+
+    .left-hero {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        h1 {
+            font-size: 42px;
+            color: var(--main);
+        }
+
+        p {
+            font-size: 16px;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .botonat {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+
+            a {
+                color: var(--black);
+                text-decoration: none;
+                padding: 10px 25px;
+                border-radius: 5px;
+                font-weight: 500;
+            }
+
+            a:first-child {
+                background-color: var(--hover);
+            }
+            a:first-child:hover{
+                background-color: var(--main);
+                transition: all ease-in-out 0.3s;
+            }
+
+            a:last-child {
+                background-color: var(--side);
+            }
+
+        }
+
+        .mini-cards {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+
+            .mini-card {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100px;
+                height: 100px;
+
+                span{
+                    color: var(--white);
+                    font-size: 17px;
+                }
+            }
+            .mini-card:nth-child(2) h4 {
+                color: var(--hover);
+                font-size: 24px;
+            }
+
+            .mini-card:nth-child(3) h4 {
+                color: var(--med);
+                font-size: 24px;
+            }
+
+            .mini-card:nth-child(1) h4 {
+                color: var(--main);
+                font-size: 24px;
+            }
+
+        }
+
+    }
+
+    .right-hero img {
+        width: 630px;
+    }
+}
+
+
+
+
+
+
+
+
+

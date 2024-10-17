@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>SilkRoad</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
@@ -10,12 +11,9 @@
     </style>
 </head>
 <body>
-
-<div th:replace="fragments/header :: header"></div>
-
-<div class="content">
+<div >
     <h4>Yoooo Mac</h4>
-    <div th:replace="${content}"></div>
+    <div layout:fragment="content"></div>
 </div>
 
 </body>
