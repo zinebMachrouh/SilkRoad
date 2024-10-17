@@ -16,14 +16,16 @@
         <property name="hibernate.connection.autocommit">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
-        <property name="net.sf.ehcache.configurationResourceName">./ehcache.xml</property>
-        <property name="hibernate.cache.use_query_cache">true</property>
-        <property name="hibernate.cache.use_second_level_cache">true</property>
+<!--        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>-->
+<!--        <property name="net.sf.ehcache.configurationResourceName">./ehcache.xml</property>-->
+<!--        <property name="hibernate.cache.use_query_cache">true</property>-->
+<!--        <property name="hibernate.cache.use_second_level_cache">true</property>-->
 
         <mapping class="com.example.silkroad.models.User"/>
         <mapping class="com.example.silkroad.models.Admin"/>
         <mapping class="com.example.silkroad.models.Client"/>
+        <mapping class="com.example.silkroad.models.Product"/>
+        <mapping class="com.example.silkroad.models.Order"/>
 
     </session-factory>
 </hibernate-configuration>

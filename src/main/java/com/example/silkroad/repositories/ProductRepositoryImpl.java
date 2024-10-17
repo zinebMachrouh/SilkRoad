@@ -2,6 +2,7 @@ package com.example.silkroad.repositories;
 
 import com.example.silkroad.models.Product;
 import com.example.silkroad.repositories.interfaces.ProductRepository;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,16 +27,22 @@ public class ProductRepositoryImpl implements ProductRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(product);
-            transaction.commit();
-            logger.info("Product added successfully: {}", product); // Log product addition
-            return product;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            logger.error("Failed to add product: {}", product, e); // Log the exception
-            throw new SQLException("Failed to add product", e);
+
+            session.save(product); // Save the product
+
+            transaction.commit(); // Commit the transaction
+            logger.info("Product added successfully: {}", product); // Log success
+
+            return product; // Return the saved product
+        } catch (HibernateException e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback(); // Rollback only if the transaction is active
+            }
+            logger.error("Failed to add product: {}", product, e); // Log failure
+            throw new SQLException("Failed to add product", e); // Throw a SQLException with details
         }
     }
+
 
     @Override
     public Product updateProduct(Product product) throws SQLException {

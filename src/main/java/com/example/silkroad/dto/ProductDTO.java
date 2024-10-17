@@ -99,13 +99,21 @@ public class ProductDTO {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductDTO that = (ProductDTO) o;
-        return id == that.id && Double.compare(price, that.price) == 0 && stock == that.stock && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(image, that.image) && Objects.equals(orders, that.orders);
+        return Double.compare(that.price, price) == 0 &&
+                stock == that.stock &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(image, that.image) &&
+                Objects.equals(orders, that.orders);
     }
+
 
     public Product dtoToModel() {
         Product product = new Product();
