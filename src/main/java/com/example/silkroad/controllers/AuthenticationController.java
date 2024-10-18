@@ -42,24 +42,16 @@ public class AuthenticationController extends HttpServlet {
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
 
-        byte[] salt = PasswordUtil.generateSalt();
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-
-        Client client = new Client(
-                "client",
-                "client@gmail.com",
-                PasswordUtil.hashPassword("client", salt),
-                encodedSalt,
-               "4 privet drive",
-                PaymentMethod.CASH,
-                42
-        );
-
-        try {
-            clientRepository.addClient(client);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        byte[] salt = PasswordUtil.generateSalt();
+//        String encodedSalt = Base64.getEncoder().encodeToString(salt);
+//
+//        Client client = new Client("client","client@gmail.com", PasswordUtil.hashPassword("password", salt), encodedSalt,"jiji", PaymentMethod.CASH, 40);
+//
+//        try {
+//            clientRepository.addClient(client);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
         ThymeLeafUtil thymeleafUtil = new ThymeLeafUtil(getServletContext());
         templateEngine = ThymeLeafUtil.templateEngine;
