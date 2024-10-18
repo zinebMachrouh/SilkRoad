@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
-    private OrderService orderService;
+//    private OrderService orderService;
 
     public ProductServiceImpl(ProductRepository productRepository, OrderService orderService) {
         this.productRepository = productRepository;
-        this.orderService = orderService;
+//        this.orderService = orderService;
     }
 
     @Override

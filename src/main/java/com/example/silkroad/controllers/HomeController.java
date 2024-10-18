@@ -11,7 +11,7 @@ import com.example.silkroad.utils.ThymeLeafUtil;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-@WebServlet(name = "HomeController", value = "/")
+@WebServlet(name = "HomeController", value = "/sum")
 public class HomeController extends HttpServlet {
     private TemplateEngine templateEngine;
 

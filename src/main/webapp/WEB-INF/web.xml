@@ -14,6 +14,17 @@
 
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/sum</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProductController</servlet-name>
+        <servlet-class>com.example.silkroad.controllers.ProductController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductController</servlet-name>
+        <url-pattern>/products</url-pattern> <!-- Change as necessary -->
+    </servlet-mapping>
+
+
 </web-app>

@@ -37,8 +37,8 @@ public class Product implements Serializable {
 //    @Column(name = "image", length = 255)
     private String image;
 
-    @ManyToMany(mappedBy = "products")
-    private List<Order> orders = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+//    private List<Order> orders;
 
     // Default constructor
     public Product() {
@@ -113,11 +113,11 @@ public class Product implements Serializable {
         this.image = image;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+//    public List<Order> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(List<Order> orders) {
+//        this.orders = orders;
+//    }
 }
