@@ -8,10 +8,11 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "name", nullable = false)
@@ -26,28 +27,24 @@ public class User {
     @Column(name = "salt", nullable = false)
     private String salt;
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
     public User() {
+        this.id = UUID.randomUUID();
     }
 
-    public User(String name, String email, String password, String salt, UserRole role) {
+    public User(String name, String email, String password, String salt) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
-        this.role = role;
     }
 
-    public User(UUID id, String name, String email, String password,String salt, UserRole role) {
+    public User(UUID id, String name, String email, String password,String salt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
-        this.role = role;
     }
 
     public UUID getId() {
@@ -81,15 +78,16 @@ public class User {
     public String getSalt() {
         return salt;
     }
+
     public void setSalt(String salt) {
         this.salt = salt;
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-    public void setRole(UserRole role) {
-        this.role = role;
+    public String getRole() {
+        if (this instanceof Admin) {
+            return "ADMIN";
+        }
+        return "CLIENT";
     }
 
     @Override
@@ -99,7 +97,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", role=" + role ;
+                ", salt='" + salt + '\'';
     }
 }

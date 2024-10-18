@@ -6,16 +6,7 @@
 
     <display-name>SilkRoad</display-name>
 
-    <servlet>
-        <servlet-name>HomeController</servlet-name>
-        <servlet-class>com.example.silkroad.controllers.HomeController</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>HomeController</servlet-name>
-        <url-pattern>/sum</url-pattern>
-    </servlet-mapping>
 
     <servlet>
         <servlet-name>ProductController</servlet-name>
@@ -23,8 +14,32 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductController</servlet-name>
-        <url-pattern>/products</url-pattern> <!-- Change as necessary -->
+        <url-pattern>/products</url-pattern>
     </servlet-mapping>
 
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/css/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/js/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AuthenticationController</servlet-name>
+        <servlet-class>com.example.silkroad.controllers.AuthenticationController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/auth/*</url-pattern>
+    </servlet-mapping>
 </web-app>

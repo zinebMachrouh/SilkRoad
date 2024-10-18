@@ -14,18 +14,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUser(String email, String password) {
+    public User getUser(String email) {
         Transaction transaction = null;
         try(Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            User user = session.createQuery("from User where email = :email and password = :password", User.class)
+            return session.createQuery("from User where email = :email", User.class)
                     .setParameter("email", email)
-                    .setParameter("password", password)
                     .uniqueResult();
-            transaction.commit();
-            return user;
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
             e.printStackTrace();
             return null;
         }

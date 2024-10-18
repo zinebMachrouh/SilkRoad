@@ -1,15 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+
 <head>
     <title>Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="icon" th:href="@{/assets/icon.png}">
 </head>
 <body>
-<div th:include="fragments/header :: header"></div>
+<section class="article">
+    <header id="welcome">
+        <h2><img th:src="@{assets/icon.png}" alt="icon"/> SilkRoad</h2>
+        <nav>
+            <a th:href="@{/home}">Home</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Blog</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="actions">
+            <a th:href="@{/auth/login}">Login</a>
+            <a href="#">Sign Up</a>
+        </div>
+    </header>
+    <main id="hero-section">
+        <div class="left-hero">
+            <h1>Welcome to SilkRoad – Your Trusted Partner for Premium Services!</h1>
+            <p>At SilkRoad, we specialize in providing secure and efficient online order management.
+                Whether you're an admin managing products and users or a client placing and tracking orders,
+                our platform is designed to meet your needs seamlessly.</p>
+            <div class="botonat">
+                <a href="#">Explore Now</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="mini-cards">
+                <div class="mini-card">
+                    <h4>+5000</h4>
+                    <span>Orders</span>
+                </div>
+                <div class="mini-card">
+                    <h4>+1500</h4>
+                    <span>Products</span>
+                </div>
+                <div class="mini-card">
+                    <h4>+450</h4>
+                    <span>Users</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-hero">
+            <img th:src="@{assets/illustation.png}" alt="illustration">
+        </div>
+    </main>
+</section>
 
-
-<div th:replace="layout :: content">
-    <h4 th:text="${message}"></h4>
-</div>
-
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

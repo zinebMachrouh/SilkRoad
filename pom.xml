@@ -33,6 +33,12 @@
             <version>5.6.15.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+
         <!-- Jakarta Bean Validation (instead of javax.validation) -->
         <dependency>
             <groupId>jakarta.validation</groupId>
