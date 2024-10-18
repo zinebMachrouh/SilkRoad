@@ -32,5 +32,13 @@
         <url-pattern>/assets/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AuthenticationController</servlet-name>
+        <servlet-class>com.example.silkroad.controllers.AuthenticationController</servlet-class>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>AuthenticationController</servlet-name>
+        <url-pattern>/auth/*</url-pattern>
+    </servlet-mapping>
 </web-app>

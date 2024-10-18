@@ -4,5 +4,5 @@ import com.example.silkroad.models.User;
 import com.example.silkroad.models.enums.UserRole;
 
 public interface UserRepository {
-    public User getUser(String email, String password);
+    public User getUser(String email);
 }

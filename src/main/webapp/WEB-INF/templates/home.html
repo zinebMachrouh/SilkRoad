@@ -6,21 +6,21 @@
 <head>
     <title>Home</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-
+    <link rel="icon" th:href="@{/assets/icon.png}">
 </head>
 <body>
 <section class="article">
     <header id="welcome">
         <h2><img th:src="@{assets/icon.png}" alt="icon"/> SilkRoad</h2>
         <nav>
-            <a th:href="@{/}">Home</a>
+            <a th:href="@{/home}">Home</a>
             <a href="#">Dashboard</a>
             <a href="#">Blog</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
         </nav>
         <div class="actions">
-            <a href="#">Login</a>
+            <a th:href="@{/auth/login}">Login</a>
             <a href="#">Sign Up</a>
         </div>
     </header>

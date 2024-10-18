@@ -11,26 +11,23 @@ public class UserDTO {
     private String email;
     private String password;
     private String salt;
-    private UserRole role;
 
     public UserDTO() {
     }
 
-    public UserDTO(String name, String email, String password, String salt, UserRole role) {
+    public UserDTO(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
-        this.role = role;
     }
 
-    public UserDTO(UUID id, String name, String email, String password, String salt, UserRole role) {
+    public UserDTO(UUID id, String name, String email, String password, String salt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.salt = salt;
-        this.role = role;
     }
 
     public UUID getId() {
@@ -61,13 +58,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
     public String getSalt() {
         return salt;
     }
@@ -81,14 +71,13 @@ public class UserDTO {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role ;
+                ", password='" + password + '\'';
     }
 
     public User dtoToModel() {
-        return new User(this.id, this.name, this.email, this.password, this.salt, this.role);
+        return new User(this.id, this.name, this.email, this.password, this.salt);
     }
     public UserDTO modelToDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getSalt(), user.getPassword(), user.getRole());
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getSalt(), user.getPassword());
     }
 }

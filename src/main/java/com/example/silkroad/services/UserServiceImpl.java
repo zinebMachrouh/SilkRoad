@@ -1,6 +1,7 @@
 package com.example.silkroad.services;
 
 import com.example.silkroad.models.Admin;
+import com.example.silkroad.models.Client;
 import com.example.silkroad.models.User;
 import com.example.silkroad.models.enums.UserRole;
 import com.example.silkroad.repositories.interfaces.AdminRepository;
@@ -26,9 +27,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String email, String password,HttpSession session) throws SQLException {
+        System.out.println("Login service");
         validateInput(email, password);
 
-        User user = userRepository.getUser(email, password);
+        System.out.println("Login service after validation");
+
+        User user = userRepository.getUser(email);
+        System.out.println("Login service after user" + user);
         if (user == null) {
             throw new SQLException("User not found");
         }
@@ -60,11 +65,15 @@ public class UserServiceImpl implements UserService {
 
     private User fetchUserByRole(User user, String email, HttpSession session) throws SQLException {
         switch (user.getRole()) {
-            case ADMIN:
+            case "ADMIN":
                 Admin admin = adminRepository.getAdminByEmail(email);
                 session.setAttribute("loggedUser", admin);
-            case CLIENT:
-                return clientRepository.getClientByEmail(email);
+                return admin;
+            case "CLIENT":
+                Client client = clientRepository.getClientByEmail(email);
+                session.setAttribute("loggedUser", client);
+                return client;
+
             default:
                 throw new SQLException("Unknown role: " + user.getRole());
         }

@@ -15,14 +15,14 @@ public class ClientDTO extends UserDTO {
     }
 
     public ClientDTO(String name, String email, String password, String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(name, email, password,salt, UserRole.CLIENT);
+        super(name, email, password,salt);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
     }
 
     public ClientDTO(UUID id, String name, String email, String password, String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(id, name, email, password, salt, UserRole.CLIENT);
+        super(id, name, email, password, salt);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
