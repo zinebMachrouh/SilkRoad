@@ -1,7 +1,9 @@
 package com.example.silkroad.controllers;
 
 import com.example.silkroad.models.Admin;
+import com.example.silkroad.models.Client;
 import com.example.silkroad.models.User;
+import com.example.silkroad.models.enums.PaymentMethod;
 import com.example.silkroad.repositories.AdminRepositoryImpl;
 import com.example.silkroad.repositories.ClientRepositoryImpl;
 import com.example.silkroad.repositories.UserRepositoryImpl;
@@ -39,6 +41,25 @@ public class AuthenticationController extends HttpServlet {
         ClientRepository clientRepository = new ClientRepositoryImpl(sessionFactory);
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
+
+        byte[] salt = PasswordUtil.generateSalt();
+        String encodedSalt = Base64.getEncoder().encodeToString(salt);
+
+        Client client = new Client(
+                "client",
+                "client@gmail.com",
+                PasswordUtil.hashPassword("client", salt),
+                encodedSalt,
+               "4 privet drive",
+                PaymentMethod.CASH,
+                42
+        );
+
+        try {
+            clientRepository.addClient(client);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         ThymeLeafUtil thymeleafUtil = new ThymeLeafUtil(getServletContext());
         templateEngine = ThymeLeafUtil.templateEngine;
