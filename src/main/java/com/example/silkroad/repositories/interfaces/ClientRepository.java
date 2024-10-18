@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ClientRepository {
-    public Client addClient(Client admin) throws SQLException;
+    public Client addClient(Client client) throws SQLException;
     public Client getClientById(String id) throws SQLException;
     public Client getClientByEmail(String email) throws SQLException;
-    public Client updateClient(Client admin) throws SQLException;
+    public Client updateClient(Client client) throws SQLException;
     public boolean deleteClient(String id) throws SQLException;
     public List<Client> getAllClients() throws SQLException;
 }

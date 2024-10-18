@@ -18,17 +18,17 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client addClient(Client admin) throws SQLException {
+    public Client addClient(Client client) throws SQLException {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(admin);
+            session.save(client);
             transaction.commit();
-            return admin;
+            return client;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            throw new SQLException("Failed to add admin", e);
+            throw new SQLException("Failed to add client", e);
         }
     }
 
@@ -37,13 +37,13 @@ public class ClientRepositoryImpl implements ClientRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Client admin = session.get(Client.class, id);
+            Client client = session.get(Client.class, id);
             transaction.commit();
-            return admin;
+            return client;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            throw new SQLException("Failed to get admin", e);
+            throw new SQLException("Failed to get client", e);
         }
     }
 
@@ -52,30 +52,30 @@ public class ClientRepositoryImpl implements ClientRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Client admin = session.createQuery("from Client where email = :email", Client.class)
+            Client client = session.createQuery("from Client where email = :email", Client.class)
                     .setParameter("email", email)
                     .uniqueResult();
             transaction.commit();
-            return admin;
+            return client;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            throw new SQLException("Failed to get admin", e);
+            throw new SQLException("Failed to get client", e);
         }
     }
 
     @Override
-    public Client updateClient(Client admin) throws SQLException {
+    public Client updateClient(Client client) throws SQLException {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.update(admin);
+            session.update(client);
             transaction.commit();
-            return admin;
+            return client;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            throw new SQLException("Failed to update admin", e);
+            throw new SQLException("Failed to update client", e);
         }
     }
 
@@ -84,9 +84,9 @@ public class ClientRepositoryImpl implements ClientRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Client admin = session.get(Client.class, id);
-            if (admin != null) {
-                session.delete(admin);
+            Client client = session.get(Client.class, id);
+            if (client != null) {
+                session.delete(client);
                 transaction.commit();
                 return true;
             }
@@ -94,7 +94,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-            throw new SQLException("Failed to delete admin", e);
+            throw new SQLException("Failed to delete client", e);
         }
     }
 
@@ -104,7 +104,7 @@ public class ClientRepositoryImpl implements ClientRepository {
             return session.createQuery("from Client", Client.class).list();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new SQLException("Failed to get all admins", e);
+            throw new SQLException("Failed to get all clients", e);
         }
     }
 }
