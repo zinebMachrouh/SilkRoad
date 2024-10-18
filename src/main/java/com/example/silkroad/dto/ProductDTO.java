@@ -14,7 +14,7 @@ public class ProductDTO {
     private double price;
     private int stock;
     private String image;
-    private List<OrderDTO> orders = new ArrayList<>();
+//    private List<OrderDTO> orders = new ArrayList<>();
 
     public ProductDTO() {
     }
@@ -78,13 +78,13 @@ public class ProductDTO {
         this.image = image;
     }
 
-    public List<OrderDTO> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<OrderDTO> orders) {
-        this.orders = orders;
-    }
+//    public List<OrderDTO> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(List<OrderDTO> orders) {
+//        this.orders = orders;
+//    }
 
     @Override
     public String toString() {
@@ -95,17 +95,25 @@ public class ProductDTO {
                 ", price=" + price +
                 ", stock=" + stock +
                 ", image='" + image + '\'' +
-                ", orders=" + orders +
+//                ", orders=" + orders +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductDTO that = (ProductDTO) o;
-        return id == that.id && Double.compare(price, that.price) == 0 && stock == that.stock && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(image, that.image) && Objects.equals(orders, that.orders);
+        return Double.compare(that.price, price) == 0 &&
+                stock == that.stock &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(image, that.image);
+//                Objects.equals(orders, that.orders);
     }
+
 
     public Product dtoToModel() {
         Product product = new Product();
@@ -115,13 +123,13 @@ public class ProductDTO {
         product.setPrice(this.price);
         product.setStock(this.stock);
         product.setImage(this.image);
-        this.orders.forEach(orderDTO -> product.getOrders().add(orderDTO.dtoToModel()));
+//        this.orders.forEach(orderDTO -> product.getOrders().add(orderDTO.dtoToModel()));
         return product;
     }
 
     public static ProductDTO modelToDTO(Product product) {
         ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getImage());
-        product.getOrders().forEach(order -> productDTO.getOrders().add(OrderDTO.modelToDTO(order)));
+//        product.getOrders().forEach(order -> productDTO.getOrders().add(OrderDTO.modelToDTO(order)));
         return productDTO;
     }
 }

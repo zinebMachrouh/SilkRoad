@@ -5,11 +5,12 @@ import com.example.silkroad.models.Product;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
     public Product addProduct(ProductDTO product) throws SQLException;
     public Product updateProduct(ProductDTO product) throws SQLException;
-    void deleteProduct(int id) throws SQLException;
+    void deleteProduct(UUID id) throws SQLException;
     List<ProductDTO> getAllProducts() throws SQLException;
-    Product getProductById(int id) throws SQLException;
+    Product getProductById(UUID id) throws SQLException;
 }

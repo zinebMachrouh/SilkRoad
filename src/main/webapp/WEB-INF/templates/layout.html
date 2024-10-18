@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>SilkRoad</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        body{
+            background-color: blue;
+        }
+    </style>
 </head>
 <body>
+<div >
+    <th:block th:replace="fragments/header :: header(false)"></th:block>
 
-<div th:insert="fragments/header :: header"></div>
-
-<div class="content">
-    <div th:replace="${content}"></div>
+    <h4>Yoooo Mac</h4>
+    <div layout:fragment="content"></div>
 </div>
 
 </body>

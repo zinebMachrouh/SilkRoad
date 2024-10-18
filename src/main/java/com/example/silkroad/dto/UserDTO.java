@@ -10,24 +10,24 @@ public class UserDTO {
     private String name;
     private String email;
     private String password;
-    private UserRole role;
+    private String salt;
 
     public UserDTO() {
     }
 
-    public UserDTO(String name, String email, String password, UserRole role) {
+    public UserDTO(String name, String email, String password, String salt) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.salt = salt;
     }
 
-    public UserDTO(UUID id, String name, String email, String password, UserRole role) {
+    public UserDTO(UUID id, String name, String email, String password, String salt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.salt = salt;
     }
 
     public UUID getId() {
@@ -58,11 +58,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
+    public String getSalt() {
+        return salt;
     }
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override
@@ -71,14 +71,13 @@ public class UserDTO {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role ;
+                ", password='" + password + '\'';
     }
 
     public User dtoToModel() {
-        return new User(this.id, this.name, this.email, this.password, this.role);
+        return new User(this.id, this.name, this.email, this.password, this.salt);
     }
     public UserDTO modelToDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getSalt(), user.getPassword());
     }
 }

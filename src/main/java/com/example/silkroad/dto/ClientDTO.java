@@ -14,15 +14,15 @@ public class ClientDTO extends UserDTO {
     public ClientDTO() {
     }
 
-    public ClientDTO(String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(name, email, password, UserRole.CLIENT);
+    public ClientDTO(String name, String email, String password, String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(name, email, password,salt);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
     }
 
-    public ClientDTO(UUID id, String name, String email, String password, String shippingAddress, PaymentMethod paymentMethod, int points) {
-        super(id, name, email, password, UserRole.CLIENT);
+    public ClientDTO(UUID id, String name, String email, String password, String salt, String shippingAddress, PaymentMethod paymentMethod, int points) {
+        super(id, name, email, password, salt);
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
         this.points = points;
@@ -59,10 +59,10 @@ public class ClientDTO extends UserDTO {
     }
 
     public Client dtoToModel() {
-        return new Client(getId(), getName(), getEmail(), getPassword(), shippingAddress, paymentMethod, points);
+        return new Client(getId(), getName(), getEmail(), getPassword(), getSalt(), shippingAddress, paymentMethod, points);
     }
 
     public static ClientDTO modelToDTO(Client client) {
-        return new ClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPassword(), client.getShippingAddress(), client.getPaymentMethod(), client.getPoints());
+        return new ClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPassword(), client.getSalt(), client.getShippingAddress(), client.getPaymentMethod(), client.getPoints());
     }
 }

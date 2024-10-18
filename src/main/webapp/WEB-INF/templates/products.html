@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100">
+<header class="bg-gray-800 p-4">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Product Management</h1>
+    </div>
+</header>
+<div class="flex">
+
+    <!-- Sidebar -->
+    <aside class="bg-gray-800 w-36 p-6">
+        <nav>
+            <ul>
+                <li class="mb-4">
+                    <a href="#" class="text-gray-300 hover:text-white">Home</a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="text-gray-300 hover:text-white">Products</a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="text-gray-300 hover:text-white">Orders</a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="text-gray-300 hover:text-white">Settings</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="flex-1 p-6">
+
+
+        <!-- Main Content -->
+        <div id="mainContent">
+            <!-- Top Bar: Search on the left, Add Product on the right -->
+            <div class="flex justify-between mb-4">
+                <!-- Search Bar -->
+                <div>
+                    <input type="text" placeholder="Search products..." class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+                </div>
+
+                <!-- Add Product Button -->
+                <button onclick="toggleAddProductForm()" style="background-color: #FACA50; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; transition: background-color 0.3s;" class="hover:bg-green-600">
+                    Add Product
+                </button>
+
+            </div>
+
+            <!-- Table of Products -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto border-collapse bg-gray-800 border border-gray-700">
+                    <thead>
+                    <tr class="bg-gray-700 text-gray-400">
+                        <th class="px-4 py-2 border-b border-gray-600">Name</th>
+                        <th class="px-4 py-2 border-b border-gray-600">Description</th>
+                        <th class="px-4 py-2 border-b border-gray-600">Price</th>
+                        <th class="px-4 py-2 border-b border-gray-600">Stock</th>
+                        <th class="px-4 py-2 border-b border-gray-600">Image</th>
+                        <th class="px-4 py-2 border-b border-gray-600">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}" class="hover:bg-gray-700">
+                        <!-- Update Product Form -->
+                        <form th:action="@{/products}" method="post" class="inline">
+                            <input type="hidden" name="id" th:value="${product.id}">
+                            <input type="hidden" name="action" value="update">
+                            <td class="border-b border-gray-600 px-4 py-2">
+                                <input type="text" name="name" th:value="${product.name}" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600" required>
+                            </td>
+                            <td class="border-b border-gray-600 px-4 py-2">
+                                <input type="text" name="description" th:value="${product.description}" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600" required>
+                            </td>
+                            <td class="border-b border-gray-600 px-4 py-2">
+                                <input type="number" name="price" th:value="${product.price}" step="0.01" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600" required>
+                            </td>
+                            <td class="border-b border-gray-600 px-4 py-2">
+                                <input type="number" name="stock" th:value="${product.stock}" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600" required>
+                            </td>
+                            <td class="border-b border-gray-600 px-4 py-2">
+                                <input type="hidden" name="image" th:value="${product.image}" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600" required>
+                                <img th:src="@{/images/{image}(image=${product.image})}" alt="Product Image" width="50" class="mb-2">
+                            </td>
+                            <td class="border-b border-gray-600 px-4 py-2 flex space-x-2">
+                                <!-- Update Button -->
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update</button>
+                            </td>
+                        </form>
+
+                        <!-- Separate Delete Form -->
+                        <td class="border-b border-gray-600 px-4 py-2 flex space-x-2">
+                            <form th:action="@{/products}" method="post">
+                                <input type="hidden" name="id" th:value="${product.id}">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add New Product Modal (Hidden by default) -->
+        <div id="addProductModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-80 hidden">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full">
+                <h2 class="text-2xl font-bold mb-4">Add New Product</h2>
+                <form th:action="@{/products}" method="post" class="space-y-4">
+                    <input type="hidden" name="action" value="add">
+
+                    <div>
+                        <label for="name" class="block mb-2">Name:</label>
+                        <input type="text" name="name" id="name" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
+                    </div>
+
+                    <div>
+                        <label for="description" class="block mb-2">Description:</label>
+                        <input type="text" name="description" id="description" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
+                    </div>
+
+                    <div>
+                        <label for="price" class="block mb-2">Price:</label>
+                        <input type="number" name="price" id="price" step="0.01" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
+                    </div>
+
+                    <div>
+                        <label for="stock" class="block mb-2">Stock:</label>
+                        <input type="number" name="stock" id="stock" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
+                    </div>
+
+                    <div>
+                        <label for="image" class="block mb-2">Image Path:</label>
+                        <input type="text" name="image" id="image" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <button type="button" onclick="toggleAddProductForm()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cancel</button>
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

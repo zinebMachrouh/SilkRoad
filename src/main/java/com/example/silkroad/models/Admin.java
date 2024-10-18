@@ -15,13 +15,13 @@ public class Admin extends User{
     public Admin() {
     }
 
-    public Admin(String name, String email, String password, boolean isSuperAdmin) {
-        super(name, email, password, UserRole.ADMIN);
+    public Admin(String name, String email, String password, String salt, boolean isSuperAdmin) {
+        super(name, email, password, salt);
         this.isSuperAdmin = isSuperAdmin;
     }
 
-    public Admin(UUID id, String name, String email, String password, boolean isSuperAdmin) {
-        super(id, name, email, password, UserRole.ADMIN);
+    public Admin(UUID id, String name, String email, String password, String salt, boolean isSuperAdmin) {
+        super(id, name, email, password, salt);
         this.isSuperAdmin = isSuperAdmin;
     }
 

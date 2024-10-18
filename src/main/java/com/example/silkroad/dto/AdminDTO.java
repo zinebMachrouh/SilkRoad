@@ -11,13 +11,13 @@ public class AdminDTO extends UserDTO {
     public AdminDTO() {
     }
 
-    public AdminDTO(String name, String email, String password, boolean isSuperAdmin) {
-        super(name, email, password, UserRole.ADMIN);
+    public AdminDTO(String name, String email, String password, String salt, boolean isSuperAdmin) {
+        super(name, email, password, salt);
         this.isSuperAdmin = isSuperAdmin;
     }
 
-    public AdminDTO(UUID id, String name, String email, String password, boolean isSuperAdmin) {
-        super(id, name, email, password, UserRole.ADMIN);
+    public AdminDTO(UUID id, String name, String email, String password, String salt, boolean isSuperAdmin) {
+        super(id, name, email, password, salt);
         this.isSuperAdmin = isSuperAdmin;
     }
 
@@ -36,10 +36,10 @@ public class AdminDTO extends UserDTO {
     }
 
     public Admin dtoToModel() {
-        return new Admin(getId(), getName(), getEmail(), getPassword(), isSuperAdmin());
+        return new Admin(getId(), getName(), getEmail(), getPassword(), getSalt(), isSuperAdmin());
     }
 
     public static AdminDTO modelToDTO(Admin admin) {
-        return new AdminDTO(admin.getId(), admin.getName(), admin.getEmail(), admin.getPassword(), admin.isSuperAdmin());
+        return new AdminDTO(admin.getId(), admin.getName(), admin.getEmail(), admin.getPassword(), admin.getSalt(), admin.isSuperAdmin());
     }
 }
