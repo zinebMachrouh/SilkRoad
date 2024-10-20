@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <link rel="icon" th:href="@{/assets/icon.png}">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --side: #faca50ff;
+            --jet: #161a1dff;
+            --black: #1d2025ff;
+            --med-black: #22272bff;
+            --light-black: #2a3034ff;
+            --input : #283439ff;
+            --grey: #BDC3C7;
+            --white: #f9f9f9ff;
+            --light: #f1cfeeff;
+            --med: #e297dcff;
+            --hover: #d878d2ff;
+            --main: #d167cbff;
+            --dark: #A85AA6;
+        }
+        body{
+            background-color: var(--black);
+        }
+        .custom-sidebar {
+            background-color: var(--black);
+            width: 270px;
+            padding: 20px;
+            height: 100vh;
+            color: #fff;
+            border-right: var(--grey) 1px solid;
+        }
+
+        .custom-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .custom-sidebar li {
+            margin: 20px 0;
+        }
+
+        .custom-sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-sidebar a:hover {
+            background-color: var(--med-black);
+        }
+
+        .custom-sidebar i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+        }
+
+        .custom-sidebar .active {
+            background-color: var(--med-black);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .user-avatar {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar img {
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Main content styling */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: 2px;
+            right: -1px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            font-size: 0.75rem;
+        }
+
+        .user-initials {
+            background-color: var(--main);
+            color: white;
+            padding: 7px 10px;
+            border-radius: 50%;
+            font-size: 1rem;
+            display: inline-block;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            font-weight: bold;
+        }
+
+        .custom-btn-new-user {
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+        .custom-btn-new-user:hover {
+            background-color: var(--hover);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: var(--med-black);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 550px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--white);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td:not(:last-child) {
+            padding: 12px;
+            text-align: left;
+        }
+        table th,
+        table td:not(:last-child) {
+            border-bottom: 1px solid #333;
+        }
+
+        table th {
+            //background-color: var(--black);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: var(--med-black);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .search{
+            display: flex;
+            align-items: center;
+            background-color: #2A3034;
+            border-radius: 5px;
+            border: var(--grey) 1px solid;
+            overflow: hidden;
+            width: 30%;
+
+            input{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                outline: none;
+                width: 93%;
+                padding: 10px;
+            }
+
+            button{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                width: 5%;
+            }
+        }
+        .pagination a:hover {
+            background-color: var(--light-black);
+        }
+        .custom-main{
+            background-color: var(--black);
+        }
+
+        .input-group {
+            margin: 25px 0px;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--white);
+            margin-bottom: 4px;
+            text-align: start;
+        }
+
+        .input-group input {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            color: var(--white);
+        }
+        .input-group textarea {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            resize: none;
+            color: var(--white);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,.input-group textarea:focus{
+            border-color: var(--main);
+        }
+        .input-group select{
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 10px;
+            color: var(--white);
+        }
+        .saveUser{
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class=" text-gray-100 flex">
+
+<!-- Sidebar -->
+<aside class="custom-sidebar fixed">
+    <div class="logo"><img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad</div>
+    <ul>
+        <li>
+            <a href="#" class="active">
+                <i class="bi bi-house-fill"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-box-seam"></i> Product
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-card-list"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-chat-dots-fill"></i> Chat
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a href="/SilkRoad/auth/logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="flex-1 ml-64 overflow-y-auto custom-main" >
+
+    <!-- Header: Title, Notification Icon, and User Initials -->
+    <div class="header-content mb-6" style="margin-bottom: 20px; border-bottom: 1px solid var(--grey); padding: 15px 40px;">
+        <h2 style="font-size: 24px">Hello! <span th:text="${name}"></span> &#128075;</h2>
+        <div class="flex items-center">
+            <!-- Notification icon with red badge -->
+            <div class="notification mr-4">
+                <i class="bi bi-bell-fill text-white text-2xl"></i>
+                <span class="badge"></span>
+            </div>
+            <!-- User initials -->
+            <div class="user-initials" th:text="${initials}"></div>
+        </div>
+    </div>
+
+    <!-- Search bar and Add User button -->
+    <div class="flex justify-between mb-6" style="padding: 0px 40px">
+        <div class="search">
+            <input type="text" placeholder="Search users..." class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
+            <button class="bi bi-search" type="submit"></button>
+        </div>
+        <button id="addUserBtn" class="custom-btn-new-user px-4 py-2 rounded-lg ">New User</button>
+    </div>
+
+    <!-- Table of Users -->
+    <div class=" rounded-lg" style="padding: 20px 10px; margin: 0px 40px; background-color: #161a1dff">
+        <table class="table-auto w-full">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Shipping Address</th>
+                <th>Payment Method</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}">Name</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.role}">Role</td>
+                    <td th:text="${user.shippingAddress}">Shipping Address</td>
+                    <td th:text="${user.paymentMethod}">Payment Method</td>
+                    <td><i class="bi bi-trash3"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <a th:href="@{/admin/dashboard(offset=${offset - limit}, limit=${limit})}" th:if="${offset > 0}">Previous</a>
+            <a href="#" th:text="'Page ' + (${offset / limit + 1})"></a>
+            <a th:href="@{/admin/dashboard(offset=${offset + limit}, limit=${limit})}" th:if="${offset + limit < totalUsersCount}">Next</a>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div id="userModal" class="modal">
+    <form method="post" th:action="@{/admin/addUser}" class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="text-2xl mb-4 text-white">Add New User</h2>
+
+        <!-- Form Inputs -->
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="w-full p-2 rounded-lg bg-gray-900 text-white" placeholder="John Doe">
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" class="w-full p-2 rounded-lg bg-gray-900 text-white" placeholder="example@gmail.com">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="w-full p-2 rounded-lg bg-gray-900 text-white" placeholder="We'll keep it a secret <3">
+            </div>
+            <div class="input-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" class="w-full p-2 rounded-lg bg-gray-900 text-white" onchange="toggleClientFields()">
+                    <option value="" hidden>Pick Role</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="CLIENT">Client</option>
+                </select>
+            </div>
+
+            <!-- Client Specific Fields -->
+            <div id="clientFields" class="hidden">
+                <div class="input-group">
+                    <label for="shipping_address">Shipping Address</label>
+                    <input type="text" name="shipping_address" id="shipping_address" class="w-full p-2 rounded-lg bg-gray-900 text-white" placeholder="4, Privet Drive">
+                </div>
+                <div class="input-group">
+                    <label for="payment_method">Payment Method</label>
+                    <select id="payment_method" name="payment_method" class="w-full p-2 rounded-lg bg-gray-900 text-white">
+                        <option value="" hidden >Pick Payment Method</option>
+                        <option value="CASH">Cash</option>
+                        <option value="CREDIT_CARD">Credit Card</option>
+                        <option value="PAYPAL">Paypal</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+        <button class="text-white px-4 py-2 mt-4 saveUser w-full" type="submit">Save User</button>
+    </form>
+</div>
+
+
+<script>
+    const modal = document.getElementById('userModal');
+    const addUserBtn = document.getElementById('addUserBtn');
+    const closeBtn = document.getElementsByClassName('close')[0];
+
+    addUserBtn.onclick = function() {
+        modal.style.display = 'flex';
+    }
+
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function toggleClientFields() {
+        const role = document.getElementById('role').value;
+        const clientFields = document.getElementById('clientFields');
+
+        if (role === 'CLIENT') {
+            clientFields.classList.remove('hidden');
+        } else {
+            clientFields.classList.add('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -9,7 +9,7 @@ import java.util.UUID;
 @Table(name = "admins")
 @DiscriminatorValue("ADMIN")
 public class Admin extends User{
-    @Column(name = "is_super_admin", nullable = false)
+    @Column(name = "is_super_admin", nullable = true)
     private boolean isSuperAdmin;
 
     public Admin() {

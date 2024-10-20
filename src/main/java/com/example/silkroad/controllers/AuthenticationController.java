@@ -42,17 +42,17 @@ public class AuthenticationController extends HttpServlet {
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
 
-        byte[] salt = PasswordUtil.generateSalt();
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
+        /*byte[] salt = PasswordUtil.generateSalt();
 
-        Client client = new Client("client","client@gmail.com", PasswordUtil.hashPassword("password", salt), encodedSalt,"jiji", PaymentMethod.CASH, 40);
+        String hashedPassword = PasswordUtil.hashPassword("super_admin", salt);
 
+        Admin admin = new Admin( "super admin", "super@gmail.com", hashedPassword, Base64.getEncoder().encodeToString(salt), true);
         try {
-            clientRepository.addClient(client);
+            adminRepository.addAdmin(admin);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        */
         ThymeLeafUtil thymeleafUtil = new ThymeLeafUtil(getServletContext());
         templateEngine = ThymeLeafUtil.templateEngine;
 
@@ -123,23 +123,14 @@ public class AuthenticationController extends HttpServlet {
             logger.info("User logged in successfully: " + user.getEmail());
 
             String role = user.getRole();
-
-            logger.info("User role: " + role);
+            session.setAttribute("role", role);
             switch (role) {
 
                 case "ADMIN":
-                    if (user instanceof Admin) {
-                        Admin admin = (Admin) user;
-
-                        if (admin.isSuperAdmin()) {
-                            response.sendRedirect("super-admin-dashboard");
-                        } else {
-                            response.sendRedirect("admin-dashboard");
-                        }
-                    }
+                    response.sendRedirect("admin/dashboard");
                     break;
                 case "CLIENT":
-                    response.sendRedirect("client");
+                    response.sendRedirect("client/dashboard");
                     break;
                 default:
                     response.sendRedirect("auth?action=login");
