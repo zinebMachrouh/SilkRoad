@@ -93,4 +93,9 @@ public class UserServiceImpl implements UserService {
         offset = (page - 1) * limit;
         return userRepository.getAllUsers(offset, limit);
     }
+
+    @Override
+    public int getUsersCount() throws SQLException{
+        return userRepository.getUsersCount();
+    }
 }

@@ -113,7 +113,7 @@ public class AdminController extends HttpServlet {
     private void showDashboard(WebContext ctx, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //ctx.setVariable("users", userService.getAllUsers());
         int offset = 0;
-        int limit = 13;
+        int limit = 12;
 
         String offsetParam = req.getParameter("offset");
         if (offsetParam != null) {
@@ -126,6 +126,12 @@ public class AdminController extends HttpServlet {
 
         List<User> users = Collections.emptyList();
         List<UserDTO> userDTOs = Collections.emptyList();
+        int totalUsers = 0;
+        try {
+            totalUsers = userService.getUsersCount();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         try {
             users = userService.getAllUsers(offset, limit);
             userDTOs = users.stream().map(user -> {
@@ -146,6 +152,7 @@ public class AdminController extends HttpServlet {
             ctx.setVariable("users", userDTOs);
             ctx.setVariable("limit", limit);
             ctx.setVariable("offset", offset);
+            ctx.setVariable("totalUsers", totalUsers);
             ctx.setVariable("initials", NameUtils.getInitials(user.getName()));
             templateEngine.process("superAdmin/dashboard", ctx, resp.getWriter());
         }else{
