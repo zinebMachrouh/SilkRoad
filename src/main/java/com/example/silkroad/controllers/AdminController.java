@@ -77,9 +77,6 @@ public class AdminController extends HttpServlet {
             case "/dashboard":
                 showDashboard(ctx, req, resp);
                 break;
-            case "/editUser":
-                editUser(req, ctx, resp);
-                break;
             case "/deleteUser":
                 try {
                     deleteUser(req);
@@ -101,10 +98,11 @@ public class AdminController extends HttpServlet {
         switch (action) {
             case "/addUser":
                 addUser(req);
-                resp.sendRedirect("SilkRoad/admin/dashboard");
+                resp.sendRedirect("admin/dashboard");
                 break;
-            case "/updateUser":
-                updateUser(req);
+            case "/editUser":
+                editUser(req, new WebContext(req, resp, getServletContext(), req.getLocale()), resp);
+                resp.sendRedirect("admin/dashboard");
                 break;
         }
 
@@ -213,15 +211,51 @@ public class AdminController extends HttpServlet {
         }
     }
 
-    private void updateUser(HttpServletRequest req) {
 
-    }
 
     private void editUser(HttpServletRequest req, WebContext ctx, HttpServletResponse resp) throws IOException {
-        String userId = req.getParameter("userId");
-        //User user = userService.getUserById(userId);
-        //ctx.setVariable("user", user);
-        templateEngine.process("admin/editUser", ctx, resp.getWriter());
+        String id = req.getParameter("id");
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String role = req.getParameter("role");
+        String shippingAddress = req.getParameter("shippingAddress");
+        String paymentMethod = req.getParameter("paymentMethod");
+
+        System.out.println("Name: " + name);
+        System.out.println("Email: " + email);
+        System.out.println("Role: " + role);
+        System.out.println("Shipping Address: " + shippingAddress);
+        System.out.println("Payment Method: " + paymentMethod);
+
+        AdminDTO adminDTO = null;
+        ClientDTO clientDTO = null;
+        if(role.equals("ADMIN")){
+            try {
+                Admin admin = adminService.getAdminById(id);
+                adminDTO = AdminDTO.modelToDTO(admin);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            AdminDTO admin = new AdminDTO(UUID.fromString(id),name, email, adminDTO.getPassword(), adminDTO.getSalt(), adminDTO.isSuperAdmin());
+            try {
+                adminService.updateAdmin(admin);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }else {
+            try {
+                Client client = clientService.getClientById(id);
+                clientDTO = ClientDTO.modelToDTO(client);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            ClientDTO client = new ClientDTO(UUID.fromString(id),name, email, clientDTO.getPassword(), clientDTO.getSalt(), shippingAddress, PaymentMethod.valueOf(paymentMethod), clientDTO.getPoints());
+            try {
+                clientService.updateClient(client);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void deleteUser(HttpServletRequest req) throws SQLException {

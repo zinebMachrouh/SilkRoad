@@ -195,6 +195,13 @@
             //background-color: var(--black);
         }
 
+        table td input{
+            background-color: transparent;
+            color: var(--white);
+            border: none;
+            outline: none;
+        }
+
         .pagination {
             display: flex;
             justify-content: center;
@@ -372,18 +379,41 @@
                 <th>Role</th>
                 <th>Shipping Address</th>
                 <th>Payment Method</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
                 <tr th:each="user : ${users}">
-                    <td th:text="${user.name != null ? user.name : '-'}">Name</td>
+                    <form method="post" th:action="@{/admin/editUser}">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <td>
+                            <input type="text" name="name" th:value="${user.name}" class="w-full p-2 text-white" placeholder="User Name">
+                        </td>
+                        <td>
+                            <input type="email" name="email" th:value="${user.email}" class="w-full p-2 text-white" placeholder="User Email">
+                        </td>
+                        <td>
+                            <input type="text" name="role" th:value="${user.role}" class="w-full p-2 text-white" placeholder="User Role">
+                        </td>
+                        <td>
+                            <input type="text" name="shippingAddress" th:value="${user.shippingAddress != null ? user.shippingAddress : '-'}" class="w-full p-2 text-white" placeholder="User Shipping Address">
+                        </td>
+                        <td>
+                            <input type="text" name="paymentMethod" th:value="${user.paymentMethod != null ? user.paymentMethod : '-'}" class="w-full p-2 text-white" placeholder="User Payment Method">
+                        </td>
+                        <button type="submit"></button>
+                    </form>
+                    <!--<td th:text="${user.name != null ? user.name : '-'}">Name</td>
                     <td th:text="${user.email != null ? user.email : '-'}">Email</td>
                     <td th:text="${user.role != null ? user.role : '-'}">Role</td>
                     <td th:text="${user.shippingAddress != null ? user.shippingAddress : '-'}">Shipping Address</td>
                     <td th:text="${user.paymentMethod != null ? user.paymentMethod : '-'}">Payment Method</td>
-                    <td><a th:href="@{'/admin/deleteUser?userId=' + ${user.id}}"><i class="bi bi-trash3"></i></a></td>
+                    -->
+                    <td>
+                        <a th:href="@{'/admin/deleteUser?userId=' + ${user.id}}"><i class="bi bi-trash3"></i></a>
+                    </td>
                 </tr>
+                <!--<h4 th:if="${users.isEmpty()}">No Users Found !</h4> -->
             </tbody>
         </table>
 
@@ -447,10 +477,12 @@
 </div>
 
 
+
 <script>
     const modal = document.getElementById('userModal');
     const addUserBtn = document.getElementById('addUserBtn');
     const closeBtn = document.getElementsByClassName('close')[0];
+
 
     addUserBtn.onclick = function() {
         modal.style.display = 'flex';
@@ -460,10 +492,15 @@
         modal.style.display = 'none';
     }
 
+    closeEdit.onclick = function() {
+        editModal.style.display = 'none';
+    }
+
     window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
+
     }
 
     function toggleClientFields() {
@@ -476,6 +513,7 @@
             clientFields.classList.add('hidden');
         }
     }
+
 </script>
 
 </body>

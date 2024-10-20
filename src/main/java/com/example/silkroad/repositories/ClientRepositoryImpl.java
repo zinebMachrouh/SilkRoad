@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class ClientRepositoryImpl implements ClientRepository {
     private final SessionFactory sessionFactory;
@@ -37,7 +38,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Client client = session.get(Client.class, id);
+            Client client = session.get(Client.class, UUID.fromString(id));
             transaction.commit();
             return client;
         } catch (Exception e) {
