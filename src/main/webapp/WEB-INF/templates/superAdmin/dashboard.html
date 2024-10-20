@@ -187,12 +187,19 @@
             text-align: left;
         }
         table th,
-        table td:not(:last-child) {
+        table tbody tr:not(:last-child) {
             border-bottom: 1px solid #333;
         }
 
         table th {
             //background-color: var(--black);
+        }
+
+        table td input{
+            background-color: transparent;
+            color: var(--white);
+            border: none;
+            outline: none;
         }
 
         .pagination {
@@ -304,7 +311,7 @@
     <div class="logo"><img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad</div>
     <ul>
         <li>
-            <a href="#" class="active">
+            <a th:href="@{/admin/dashboard}" class="active">
                 <i class="bi bi-house-fill"></i> Dashboard
             </a>
         </li>
@@ -329,7 +336,7 @@
             </a>
         </li>
         <li>
-            <a href="/SilkRoad/auth/logout">
+            <a th:href="@{/auth(action='logout')}">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </a>
         </li>
@@ -341,7 +348,7 @@
 
     <!-- Header: Title, Notification Icon, and User Initials -->
     <div class="header-content mb-6" style="margin-bottom: 20px; border-bottom: 1px solid var(--grey); padding: 15px 40px;">
-        <h2 style="font-size: 24px">Hello! <span th:text="${name}"></span> &#128075;</h2>
+        <h2 style="font-size: 24px">Hello <span th:text="${name}"></span> &#128075;</h2>
         <div class="flex items-center">
             <!-- Notification icon with red badge -->
             <div class="notification mr-4">
@@ -355,15 +362,15 @@
 
     <!-- Search bar and Add User button -->
     <div class="flex justify-between mb-6" style="padding: 0px 40px">
-        <div class="search">
-            <input type="text" placeholder="Search users..." class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
+        <form method="post" th:action="@{/admin/search}" class="search">
+            <input type="text" name="search" id="search" placeholder="Let's look for users <3" class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
             <button class="bi bi-search" type="submit"></button>
-        </div>
+        </form>
         <button id="addUserBtn" class="custom-btn-new-user px-4 py-2 rounded-lg ">New User</button>
     </div>
 
     <!-- Table of Users -->
-    <div class=" rounded-lg" style="padding: 20px 10px; margin: 0px 40px; background-color: #161a1dff">
+    <div class=" rounded-lg" style="padding: 0px 10px 20px 10px; margin: 0px 40px; background-color: #161a1dff">
         <table class="table-auto w-full">
             <thead>
             <tr>
@@ -372,18 +379,41 @@
                 <th>Role</th>
                 <th>Shipping Address</th>
                 <th>Payment Method</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
                 <tr th:each="user : ${users}">
-                    <td th:text="${user.name}">Name</td>
-                    <td th:text="${user.email}">Email</td>
-                    <td th:text="${user.role}">Role</td>
-                    <td th:text="${user.shippingAddress}">Shipping Address</td>
-                    <td th:text="${user.paymentMethod}">Payment Method</td>
-                    <td><i class="bi bi-trash3"></i></td>
+                    <form method="post" th:action="@{/admin/editUser}">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <td>
+                            <input type="text" name="name" th:value="${user.name}" class="w-full p-2 text-white" placeholder="User Name">
+                        </td>
+                        <td>
+                            <input type="email" name="email" th:value="${user.email}" class="w-full p-2 text-white" placeholder="User Email">
+                        </td>
+                        <td>
+                            <input type="text" name="role" th:value="${user.role}" class="w-full p-2 text-white" placeholder="User Role">
+                        </td>
+                        <td>
+                            <input type="text" name="shippingAddress" th:value="${user.shippingAddress != null ? user.shippingAddress : '-'}" class="w-full p-2 text-white" placeholder="User Shipping Address">
+                        </td>
+                        <td>
+                            <input type="text" name="paymentMethod" th:value="${user.paymentMethod != null ? user.paymentMethod : '-'}" class="w-full p-2 text-white" placeholder="User Payment Method">
+                        </td>
+                        <button type="submit"></button>
+                    </form>
+                    <!--<td th:text="${user.name != null ? user.name : '-'}">Name</td>
+                    <td th:text="${user.email != null ? user.email : '-'}">Email</td>
+                    <td th:text="${user.role != null ? user.role : '-'}">Role</td>
+                    <td th:text="${user.shippingAddress != null ? user.shippingAddress : '-'}">Shipping Address</td>
+                    <td th:text="${user.paymentMethod != null ? user.paymentMethod : '-'}">Payment Method</td>
+                    -->
+                    <td>
+                        <a th:href="@{'/admin/deleteUser?userId=' + ${user.id}}"><i class="bi bi-trash3"></i></a>
+                    </td>
                 </tr>
+                <!--<h4 th:if="${users.isEmpty()}">No Users Found !</h4> -->
             </tbody>
         </table>
 
@@ -447,10 +477,12 @@
 </div>
 
 
+
 <script>
     const modal = document.getElementById('userModal');
     const addUserBtn = document.getElementById('addUserBtn');
     const closeBtn = document.getElementsByClassName('close')[0];
+
 
     addUserBtn.onclick = function() {
         modal.style.display = 'flex';
@@ -460,10 +492,15 @@
         modal.style.display = 'none';
     }
 
+    closeEdit.onclick = function() {
+        editModal.style.display = 'none';
+    }
+
     window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
+
     }
 
     function toggleClientFields() {
@@ -476,6 +513,7 @@
             clientFields.classList.add('hidden');
         }
     }
+
 </script>
 
 </body>

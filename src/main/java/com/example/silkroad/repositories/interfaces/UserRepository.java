@@ -13,4 +13,5 @@ public interface UserRepository {
     public boolean deleteUser(UUID id) throws SQLException;
     public List<User> getAllUsers(int offset, int limit) throws SQLException;
     public int getUsersCount() throws SQLException;
+    public List<User> searchUsers(String search) throws SQLException;
 }

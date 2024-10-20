@@ -20,8 +20,8 @@
             <a href="#">Contact</a>
         </nav>
         <div class="actions">
-            <a th:href="@{/auth/login}">Login</a>
-            <a href="#">Sign Up</a>
+            <a th:href="@{/auth(action='login')}">Login</a>
+            <a th:href="@{/auth(action='signup')}">Sign Up</a>
         </div>
     </header>
     <main id="hero-section">

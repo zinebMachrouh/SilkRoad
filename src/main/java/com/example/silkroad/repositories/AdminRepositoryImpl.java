@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class AdminRepositoryImpl implements AdminRepository {
 
@@ -38,7 +39,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         Transaction transaction = null;
         try(Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Admin admin = session.get(Admin.class, id);
+            Admin admin = session.get(Admin.class, UUID.fromString(id));
             transaction.commit();
             return admin;
         } catch (Exception e) {
