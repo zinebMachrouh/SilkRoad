@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Management</title>
+    <link rel="icon" th:href="@{/assets/icon.png}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --side: #faca50ff;
+            --jet: #161a1dff;
+            --black: #1d2025ff;
+            --med-black: #22272bff;
+            --light-black: #2a3034ff;
+            --input : #283439ff;
+            --grey: #BDC3C7;
+            --white: #f9f9f9ff;
+            --light: #f1cfeeff;
+            --med: #e297dcff;
+            --hover: #d878d2ff;
+            --main: #d167cbff;
+            --dark: #A85AA6;
+        }
+        body{
+            background-color: var(--black);
+        }
+        .custom-sidebar {
+            background-color: var(--black);
+            width: 270px;
+            padding: 20px;
+            height: 100vh;
+            color: #fff;
+            border-right: var(--grey) 1px solid;
+        }
+
+        .custom-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .custom-sidebar li {
+            margin: 20px 0;
+        }
+
+        .custom-sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-sidebar a:hover {
+            background-color: var(--med-black);
+        }
+
+        .custom-sidebar i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+        }
+
+        .custom-sidebar .active {
+            background-color: var(--med-black);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .user-avatar {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar img {
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Main content styling */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: 2px;
+            right: -1px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            font-size: 0.75rem;
+        }
+
+        .user-initials {
+            background-color: var(--main);
+            color: white;
+            padding: 7px 10px;
+            border-radius: 50%;
+            font-size: 1rem;
+            display: inline-block;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            font-weight: bold;
+        }
+
+        .custom-btn-new-user {
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+        .custom-btn-new-user:hover {
+            background-color: var(--hover);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: var(--med-black);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 550px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--white);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--light-black); /* Dark background color */
+            color: var(--white); /* Light text color */
+        }
+
+        table th {
+            background-color: var(--med-black); /* Darker background for header */
+            color: var(--grey); /* Lighter color for header text */
+            text-align: left;
+            padding: 12px;
+        }
+
+        table td {
+            background-color: var(--light-black); /* Slightly different shade for rows */
+            padding: 12px;
+            border-bottom: 1px solid #333;
+        }
+
+        table tr:nth-child(even) {
+            background-color: var(--input); /* Alternate row color for better distinction */
+        }
+        table th,
+        table td {
+            color: var(--white); /* Change the text color to white or a lighter color */
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: var(--med-black);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .search{
+            display: flex;
+            align-items: center;
+            background-color: #2A3034;
+            border-radius: 5px;
+            border: var(--grey) 1px solid;
+            overflow: hidden;
+            width: 30%;
+
+            input{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                outline: none;
+                width: 93%;
+                padding: 10px;
+            }
+
+            button{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                width: 5%;
+            }
+        }
+        .pagination a:hover {
+            background-color: var(--light-black);
+        }
+        .custom-main{
+            background-color: var(--black);
+        }
+
+        .input-group {
+            margin: 25px 0px;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--white);
+            margin-bottom: 4px;
+            text-align: start;
+        }
+
+        .input-group input {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            color: var(--white);
+        }
+        .input-group textarea {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            resize: none;
+            color: var(--white);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,.input-group textarea:focus{
+            border-color: var(--main);
+        }
+        .input-group select{
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 10px;
+            color: var(--white);
+        }
+        .saveUser{
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="text-gray-100 flex">
+<aside class="custom-sidebar fixed">
+    <div class="logo">
+        <img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad
+    </div>
+    <ul>
+        <li>
+            <a href="#">
+                <i class="bi bi-house-fill"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-box-seam"></i> Products
+            </a>
+        </li>
+        <li>
+            <a href="#" class="active">
+                <i class="bi bi-card-list"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-chat-dots-fill"></i> Chat
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a href="/SilkRoad/auth/logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<div class="flex-1 ml-64 overflow-y-auto">
+    <div class="header-content mb-6" style="margin-bottom: 20px; border-bottom: 1px solid var(--grey); padding: 20px;">
+        <h1 class="text-3xl">Order Management</h1>
+        <div class="search relative">
+            <input type="text" placeholder="Search..." class="w-full py-2 pl-10 pr-3 rounded">
+            <i class="bi bi-search absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+        </div>
+    </div>
+
+            <table class="min-w-full bg-white text-gray-800 border">
+                <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">#</th>
+                    <th class="py-2 px-4 border-b">Order Date</th>
+                    <th class="py-2 px-4 border-b">Client</th>
+                    <th class="py-2 px-4 border-b">Status</th>
+                    <th class="py-2 px-4 border-b">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.orderDate}"></td>
+                    <td th:text="${order.client.name}"></td>
+                    <td>
+                        <!-- Only allow status change if the order is "Pending" -->
+                        <form th:action="@{/order}" method="post">
+                            <select name="status" class="border rounded">
+                                <option value="PENDING" th:selected="${order.status == 'PENDING'}">Pending</option>
+                                <option value="CONFIRMED">CONFIRMED</option>
+                                <option value="SHIPPED">SHIPPED</option>
+                                <option value="DELIVERED">DELIVERED</option>
+                                <option value="CANCELLED">CANCEL</option>
+                            </select>
+                            <input type="hidden" name="orderId" th:value="${order.id}" />
+                            <input type="hidden" name="action" value="edit" />
+                            <button type="submit" class="bg-blue-500 text-white py-1 px-2 rounded">Update</button>
+                        </form>
+                        <span th:if="${order.status != 'PENDING'}" th:text="${order.status}"></span>
+                    </td>
+                    <td>
+                        <!-- Only show the delete button if the status is "Pending" -->
+                        <form th:action="@{/order}" method="post">
+                            <input type="hidden" name="orderId" th:value="${order.id}" />
+                            <input type="hidden" name="action" value="delete" />
+                            <button type="submit" class="bg-red-600 text-white py-1 px-2 rounded">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+
+</div>
+
+<!-- Modal for adding a new order -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="text-xl">Add New Order</h2>
+        <form th:action="@{/orders/create}" method="post">
+            <div class="input-group">
+                <label for="client">Client:</label>
+                <select name="client" id="client" required>
+                    <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="status">Status:</label>
+                <select name="status" id="status" required>
+                    <option value="PENDING">Pending</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="orderDate">Order Date:</label>
+                <input type="date" name="orderDate" id="orderDate" required>
+            </div>
+            <button type="submit" class="bg-main text-white py-2 px-4 rounded">Create Order</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById("myModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

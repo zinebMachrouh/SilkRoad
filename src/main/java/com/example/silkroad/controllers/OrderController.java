@@ -186,13 +186,9 @@ public class OrderController extends HttpServlet {
         try {
             // Only allow status updates when the order is still pending
             OrderDTO order = orderService.getOrderById(orderId);
-            if (order.getStatus().equalsIgnoreCase(OrderStatus.PENDING.name())) {
-                order.setStatus(statusParam);
-                orderService.updateOrder(order);
-                response.sendRedirect(request.getContextPath() + "/order");
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only pending orders can be edited.");
-            }
+            order.setStatus(statusParam);
+            orderService.updateOrder(order);
+            response.sendRedirect(request.getContextPath() + "/order");
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to edit the order.");
@@ -212,12 +208,8 @@ public class OrderController extends HttpServlet {
         try {
             // Only allow deletion when the order is still pending
             OrderDTO order = orderService.getOrderById(orderId);
-            if (order.getStatus().equalsIgnoreCase(OrderStatus.PENDING.name())) {
-                orderService.deleteOrder(orderId);
-                response.sendRedirect(request.getContextPath() + "/order");
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only pending orders can be deleted.");
-            }
+            orderService.deleteOrder(orderId);
+            response.sendRedirect(request.getContextPath() + "/order");
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete the order.");
