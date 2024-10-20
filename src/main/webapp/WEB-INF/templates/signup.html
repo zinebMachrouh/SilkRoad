@@ -53,7 +53,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 15px 0px;
         }
 
         .title {
@@ -202,15 +201,9 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="example@example.com"  required/>
             </div>
-            <div class="group">
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Min : 8 characters" required/>
-                </div>
-                <div class="input-group">
-                    <label for="confirm_password">Confirm Password</label>
-                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Min : 8 characters" required/>
-                </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Min : 8 characters" required/>
             </div>
             <div class="input-group">
                 <label for="shipping_address">Shipping Address</label>
@@ -226,18 +219,6 @@
                 </select>
             </div>
 
-            <div class="group">
-                <label for="remember_me" class="remember">
-                    <input id="remember_me" type="checkbox" name="remember" />
-                    <span>Remember me</span>
-                </label>
-
-                <div class="forgot">
-                    <a th:href='@{/resetPassword}'>
-                        Forgot your password?
-                    </a>
-                </div>
-            </div>
 
             <button class="sign" type="submit">Sign in</button>
         </form>
@@ -269,8 +250,8 @@
                 </svg>
             </a>
         </div>
-        <p class="signup">Don't have an account?
-            <a th:href='@{/signup}'>Sign up</a>
+        <p class="signup">Already have an account?
+            <a th:href="@{/auth(action='login')}">Log In</a>
         </p>
     </div>
 </div>

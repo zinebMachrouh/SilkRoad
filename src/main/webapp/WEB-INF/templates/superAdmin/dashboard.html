@@ -187,7 +187,7 @@
             text-align: left;
         }
         table th,
-        table td:not(:last-child) {
+        table tbody tr:not(:last-child) {
             border-bottom: 1px solid #333;
         }
 
@@ -348,7 +348,7 @@
 
     <!-- Header: Title, Notification Icon, and User Initials -->
     <div class="header-content mb-6" style="margin-bottom: 20px; border-bottom: 1px solid var(--grey); padding: 15px 40px;">
-        <h2 style="font-size: 24px">Hello! <span th:text="${name}"></span> &#128075;</h2>
+        <h2 style="font-size: 24px">Hello <span th:text="${name}"></span> &#128075;</h2>
         <div class="flex items-center">
             <!-- Notification icon with red badge -->
             <div class="notification mr-4">
@@ -362,15 +362,15 @@
 
     <!-- Search bar and Add User button -->
     <div class="flex justify-between mb-6" style="padding: 0px 40px">
-        <div class="search">
-            <input type="text" placeholder="Search users..." class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
+        <form method="post" th:action="@{/admin/search}" class="search">
+            <input type="text" name="search" id="search" placeholder="Let's look for users <3" class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
             <button class="bi bi-search" type="submit"></button>
-        </div>
+        </form>
         <button id="addUserBtn" class="custom-btn-new-user px-4 py-2 rounded-lg ">New User</button>
     </div>
 
     <!-- Table of Users -->
-    <div class=" rounded-lg" style="padding: 20px 10px; margin: 0px 40px; background-color: #161a1dff">
+    <div class=" rounded-lg" style="padding: 0px 10px 20px 10px; margin: 0px 40px; background-color: #161a1dff">
         <table class="table-auto w-full">
             <thead>
             <tr>
