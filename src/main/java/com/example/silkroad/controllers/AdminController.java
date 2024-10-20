@@ -104,6 +104,14 @@ public class AdminController extends HttpServlet {
                 editUser(req, new WebContext(req, resp, getServletContext(), req.getLocale()), resp);
                 resp.sendRedirect("admin/dashboard");
                 break;
+
+            case "/search":
+                searchUsers(req, resp);
+                break;
+            default:
+                showDashboard(new WebContext(req, resp, getServletContext(), req.getLocale()), req, resp);
+                break;
+
         }
 
         showDashboard(new WebContext(req, resp, getServletContext(), req.getLocale()), req,resp);
@@ -261,5 +269,28 @@ public class AdminController extends HttpServlet {
     private void deleteUser(HttpServletRequest req) throws SQLException {
         String userId = req.getParameter("userId");
         userService.deleteUser(UUID.fromString(userId));
+    }
+
+    private void searchUsers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String search = req.getParameter("search");
+        List<User> users = null;
+        try {
+            users = userService.searchUsers(search);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        List<UserDTO> userDTOs = users.stream().map(user -> {
+            if (user instanceof Admin) {
+                return new UserDTO(user.getId(), user.getName(), user.getEmail(), UserRole.ADMIN, null, null);
+            } else if (user instanceof Client) {
+                Client client = (Client) user;
+                return new UserDTO(user.getId(), user.getName(), user.getEmail(), UserRole.CLIENT, client.getShippingAddress(), client.getPaymentMethod());
+            }
+            return null;
+        }).collect(Collectors.toList());
+
+        WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
+        ctx.setVariable("users", userDTOs);
+        templateEngine.process("superAdmin/dashboard", ctx, resp.getWriter());
     }
 }

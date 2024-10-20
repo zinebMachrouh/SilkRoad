@@ -75,4 +75,23 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public List<User> searchUsers(String search) throws SQLException {
+        try (Session session = sessionFactory.openSession()) {
+            List<User> users = session.createQuery(
+                            "SELECT u FROM User u " +
+                                    "LEFT JOIN Client c ON u.id = c.id " +
+                                    "WHERE NOT EXISTS (SELECT 1 FROM Admin a WHERE a.id = u.id AND a.isSuperAdmin = true) " +
+                                    "AND (u.email LIKE :search OR u.name LIKE :search OR c.shippingAddress LIKE :search)",
+                            User.class)
+                    .setParameter("search", "%" + search + "%")
+                    .list();
+            return users;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to search users", e);
+        }
+
+    }
+
 }

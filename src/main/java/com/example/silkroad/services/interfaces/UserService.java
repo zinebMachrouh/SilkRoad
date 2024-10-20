@@ -13,4 +13,5 @@ public interface UserService {
     public boolean deleteUser(UUID id) throws SQLException;
     List<User> getAllUsers(int page, int limit) throws SQLException;
     public int getUsersCount() throws SQLException;
+    public List<User> searchUsers(String search) throws SQLException;
 }

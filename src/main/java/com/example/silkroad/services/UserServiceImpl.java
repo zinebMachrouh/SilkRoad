@@ -98,4 +98,12 @@ public class UserServiceImpl implements UserService {
     public int getUsersCount() throws SQLException{
         return userRepository.getUsersCount();
     }
+    @Override
+    public List<User> searchUsers(String search) throws SQLException{
+        if (search.isEmpty()) {
+            throw new SQLException("Search query cannot be empty");
+        }else{
+            return userRepository.searchUsers(search);
+        }
+    }
 }
