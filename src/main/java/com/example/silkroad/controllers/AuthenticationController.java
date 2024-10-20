@@ -1,5 +1,6 @@
 package com.example.silkroad.controllers;
 
+import com.example.silkroad.dto.ClientDTO;
 import com.example.silkroad.models.Admin;
 import com.example.silkroad.models.Client;
 import com.example.silkroad.models.User;
@@ -10,7 +11,9 @@ import com.example.silkroad.repositories.UserRepositoryImpl;
 import com.example.silkroad.repositories.interfaces.AdminRepository;
 import com.example.silkroad.repositories.interfaces.ClientRepository;
 import com.example.silkroad.repositories.interfaces.UserRepository;
+import com.example.silkroad.services.ClientServiceImpl;
 import com.example.silkroad.services.UserServiceImpl;
+import com.example.silkroad.services.interfaces.ClientService;
 import com.example.silkroad.services.interfaces.UserService;
 import com.example.silkroad.utils.HibernateUtil;
 import com.example.silkroad.utils.PasswordUtil;
@@ -31,6 +34,7 @@ public class AuthenticationController extends HttpServlet {
     private Logger logger = Logger.getLogger(AuthenticationController.class.getName());
     private UserService userService;
     private TemplateEngine templateEngine;
+    private ClientService clientService;
 
     @Override
     public void init() {
@@ -41,6 +45,7 @@ public class AuthenticationController extends HttpServlet {
         ClientRepository clientRepository = new ClientRepositoryImpl(sessionFactory);
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
+        this.clientService = new ClientServiceImpl(clientRepository);
 
         /*byte[] salt = PasswordUtil.generateSalt();
 
@@ -60,20 +65,24 @@ public class AuthenticationController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getPathInfo();
+        String action = request.getParameter("action");
+
         if (action == null || action.equals("/")) {
-            action = "login";
+            action = "/login";
         }
 
         switch (action) {
             case "login":
                 showLoginPage(request, response);
                 break;
+            case "signup":
+                showSignUpPage(request, response);
+                break;
             case "logout":
                 logout(request, response);
                 break;
             default:
-                showLoginPage(request, response);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Page Not Found");
                 break;
         }
     }
@@ -82,6 +91,12 @@ public class AuthenticationController extends HttpServlet {
         WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         response.setContentType("text/html;charset=UTF-8");
         templateEngine.process("login", ctx, response.getWriter());
+    }
+
+    private void showSignUpPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        response.setContentType("text/html;charset=UTF-8");
+        templateEngine.process("signup", ctx, response.getWriter());
     }
 
 
@@ -98,6 +113,9 @@ public class AuthenticationController extends HttpServlet {
         switch (action) {
             case "login":
                 handleLogin(request, response);
+                break;
+            case "signup":
+                handleSignup(request, response);
                 break;
             default:
                 response.sendRedirect("auth?action=login");
@@ -146,4 +164,38 @@ public class AuthenticationController extends HttpServlet {
         }
     }
 
+    private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("Signup request received");
+        HttpSession session = request.getSession();
+
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String shippingAddress = request.getParameter("shipping_address");
+        String paymentMethod = request.getParameter("payment_method");
+
+        if (name == null || email == null || password == null) {
+            logger.warning("Name, email, password is missing");
+        } else {
+            logger.info("Name: " + name);
+            logger.info("Email: " + email);
+            logger.info("Password: " + password);
+        }
+
+        try {
+            byte[] salt = PasswordUtil.generateSalt();
+            assert password != null;
+            String hashedPassword = PasswordUtil.hashPassword(password, salt);
+           ClientDTO client = new ClientDTO(name, email, hashedPassword,Base64.getEncoder().encodeToString(salt), shippingAddress, PaymentMethod.valueOf(paymentMethod),0);
+            clientService.addClient(client);
+
+            String role = "CLIENT";
+            session.setAttribute("role", role);
+
+            response.sendRedirect("client/dashboard");
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Invalid email or password");
+            showLoginPage(request, response);
+        }
+    }
 }

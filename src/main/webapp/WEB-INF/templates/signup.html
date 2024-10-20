@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+
+<head>
+    <title>SignUp</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="icon" th:href="@{/assets/icon.png}">
+    <script src="https://kit.fontawesome.com/6e1faf1eda.js" crossorigin="anonymous"></script>
+    <style>
+        #login-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-position: center;
+            background-size: cover;
+        }
+        .back {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background-color: var(--main);
+            border-radius: 200px;
+            width: 50px;
+            height: 50px;
+            color: #22272B;
+            padding: 10px 14px;
+            letter-spacing: 2px;
+            font-size: 24px;
+        }
+
+
+        #login-body .form-container {
+            width: 480px;
+            height: fit-content;
+            border-radius: 0.75rem;
+            background-color: #22272B;
+            padding: 2rem;
+            color: var(--white);
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+        }
+
+        .remember {
+            display: flex;
+            gap: 3px;
+        }
+
+        .group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0px;
+        }
+
+        .title {
+            text-align: center;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--white);
+            gap: 1px;
+        }
+
+
+        .input-group {
+            margin: 25px 0px;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .input-group input {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            color: var(--white);
+        }
+        .input-group textarea {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            resize: none;
+            color: var(--white);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,.input-group textarea:focus{
+            border-color: var(--main);
+        }
+        .input-group select{
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 10px;
+            color: var(--white);
+        }
+        .forgot a,
+        .signup a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot a:hover,
+        .signup a:hover {
+            text-decoration: underline var(--main);
+        }
+
+        .sign {
+            display: block;
+            width: 100%;
+            background-color: var(--main);
+            padding: 0.75rem;
+            text-align: center;
+            color: #22272B;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+
+        .social-message {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .line {
+            height: 1px;
+            flex: 1 1 0%;
+            background-color: var(--white);
+        }
+
+        .social-message .message {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: var(--white);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .social-icons .icon {
+            border-radius: 0.125rem;
+            padding: 0.75rem;
+            border: none;
+            background-color: transparent;
+            margin-left: 8px;
+        }
+
+        .social-icons .icon svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            fill: var(--white);
+        }
+
+        .signup {
+            text-align: center;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+<div id="login-body" th:style="'background-image: url(' + @{/assets/signup.svg} + ');'">
+    <a th:href="@{/home}" class="back">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="form-container">
+        <h2 class="title"><img th:src="@{/assets/icon.png}" alt="logo" style="width: 32px;margin-right: 7px" />SilkRoad</h2>
+        <form class="form" method="POST" action="/SilkRoad/auth?action=signup">
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" name="name" id="name" placeholder="John Doe"  required />
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="example@example.com"  required/>
+            </div>
+            <div class="group">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Min : 8 characters" required/>
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Min : 8 characters" required/>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="shipping_address">Shipping Address</label>
+                <input type="text" name="shipping_address" id="shipping_address" placeholder="1234 Main St"  required/>
+            </div>
+            <div class="input-group">
+                <label for="payment_method">Payment Method</label>
+                <select name="payment_method" id="payment_method" required>
+                    <option value="" hidden>Pick Payment Method</option>
+                    <option value="CREDIT_CARD">Credit Card</option>
+                    <option value="CASH">cash</option>
+                    <option value="PAYPAL">Paypal</option>
+                </select>
+            </div>
+
+            <div class="group">
+                <label for="remember_me" class="remember">
+                    <input id="remember_me" type="checkbox" name="remember" />
+                    <span>Remember me</span>
+                </label>
+
+                <div class="forgot">
+                    <a th:href='@{/resetPassword}'>
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+
+            <button class="sign" type="submit">Sign in</button>
+        </form>
+
+        <div class="social-message">
+            <div class="line"></div>
+            <p class="message">Login with social accounts</p>
+            <div class="line"></div>
+        </div>
+        <div class="social-icons">
+            <a aria-label="Log in with Google" class="icon" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 fill-current">
+                    <path
+                            d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z">
+                    </path>
+                </svg>
+            </a>
+            <button aria-label="Log in with Twitter" class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 fill-current">
+                    <path
+                            d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z">
+                    </path>
+                </svg>
+            </button>
+            <a aria-label="Log in with Facebook" class="icon" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                            d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z" />
+                </svg>
+            </a>
+        </div>
+        <p class="signup">Don't have an account?
+            <a th:href='@{/signup}'>Sign up</a>
+        </p>
+    </div>
+</div>
+</body>
