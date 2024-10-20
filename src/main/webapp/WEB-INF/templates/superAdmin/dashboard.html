@@ -391,7 +391,7 @@
         <div class="pagination">
             <a th:href="@{/admin/dashboard(offset=${offset - limit}, limit=${limit})}" th:if="${offset > 0}">Previous</a>
             <a href="#" th:text="'Page ' + (${offset / limit + 1})"></a>
-            <a th:href="@{/admin/dashboard(offset=${offset + limit}, limit=${limit})}" th:if="${offset + limit < totalUsersCount}">Next</a>
+            <a th:href="@{/admin/dashboard(offset=${offset + limit}, limit=${limit})}" th:if="${offset + limit < totalUsers}">Next</a>
         </div>
     </div>
 </div>

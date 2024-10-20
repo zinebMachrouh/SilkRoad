@@ -65,4 +65,14 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public int getUsersCount() throws SQLException{
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("SELECT COUNT(u) FROM User u", Long.class).uniqueResult().intValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 }
