@@ -1,6 +1,7 @@
 package com.example.silkroad.dto;
 
 import com.example.silkroad.models.User;
+import com.example.silkroad.models.enums.PaymentMethod;
 import com.example.silkroad.models.enums.UserRole;
 
 import java.util.UUID;
@@ -10,6 +11,9 @@ public class UserDTO {
     private String name;
     private String email;
     private String password;
+    private UserRole role;
+    private String shippingAddress;
+    private PaymentMethod paymentMethod;
     private String salt;
 
     public UserDTO() {
@@ -28,6 +32,14 @@ public class UserDTO {
         this.email = email;
         this.password = password;
         this.salt = salt;
+    }
+
+    public UserDTO( String name, String email, UserRole role, String shippingAddress, PaymentMethod paymentMethod) {
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.shippingAddress = shippingAddress;
+        this.paymentMethod = paymentMethod;
     }
 
     public UUID getId() {
@@ -64,6 +76,30 @@ public class UserDTO {
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+    public UserRole getRole() {
+        return role;
+    }
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+
 
     @Override
     public String toString() {

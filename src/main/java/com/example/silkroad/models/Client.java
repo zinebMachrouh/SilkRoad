@@ -11,14 +11,14 @@ import java.util.UUID;
 @Table(name = "clients")
 @DiscriminatorValue("CLIENT")
 public class Client extends User{
-    @Column(name = "shipping_address", nullable = false)
+    @Column(name = "shipping_address", nullable = true)
     private String shippingAddress;
 
-    @Column(name = "payment_method", nullable = false)
+    @Column(name = "payment_method", nullable = true)
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "points", nullable = false)
+    @Column(name = "points", nullable = true)
     private int points;
 
     public Client() {

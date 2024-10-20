@@ -1,5 +1,6 @@
 package com.example.silkroad.services;
 
+import com.example.silkroad.dto.UserDTO;
 import com.example.silkroad.models.Admin;
 import com.example.silkroad.models.Client;
 import com.example.silkroad.models.User;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -77,5 +80,17 @@ public class UserServiceImpl implements UserService {
             default:
                 throw new SQLException("Unknown role: " + user.getRole());
         }
+    }
+
+     @Override
+    public boolean deleteUser(UUID id) throws SQLException {
+        return userRepository.deleteUser(id);
+    }
+
+    @Override
+    public List<User> getAllUsers(int offset, int limit) throws SQLException {
+        int page = offset / limit + 1;
+        offset = (page - 1) * limit;
+        return userRepository.getAllUsers(offset, limit);
     }
 }

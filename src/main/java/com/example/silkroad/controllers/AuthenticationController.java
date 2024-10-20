@@ -42,17 +42,17 @@ public class AuthenticationController extends HttpServlet {
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
 
-//        byte[] salt = PasswordUtil.generateSalt();
-//        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-//
-//        Client client = new Client("client","client@gmail.com", PasswordUtil.hashPassword("password", salt), encodedSalt,"jiji", PaymentMethod.CASH, 40);
-//
-//        try {
-//            clientRepository.addClient(client);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        /*byte[] salt = PasswordUtil.generateSalt();
 
+        String hashedPassword = PasswordUtil.hashPassword("super_admin", salt);
+
+        Admin admin = new Admin( "super admin", "super@gmail.com", hashedPassword, Base64.getEncoder().encodeToString(salt), true);
+        try {
+            adminRepository.addAdmin(admin);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        */
         ThymeLeafUtil thymeleafUtil = new ThymeLeafUtil(getServletContext());
         templateEngine = ThymeLeafUtil.templateEngine;
 
@@ -112,9 +112,6 @@ public class AuthenticationController extends HttpServlet {
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
 
-
-
-
         if (email == null || password == null) {
             logger.warning("Email or password is missing");
         } else {
@@ -126,23 +123,14 @@ public class AuthenticationController extends HttpServlet {
             logger.info("User logged in successfully: " + user.getEmail());
 
             String role = user.getRole();
-
             session.setAttribute("role", role);
             switch (role) {
 
                 case "ADMIN":
-                    if (user instanceof Admin) {
-                        Admin admin = (Admin) user;
-
-                        if (admin.isSuperAdmin()) {
-                            response.sendRedirect("super-admin-dashboard");
-                        } else {
-                            response.sendRedirect("admin-dashboard");
-                        }
-                    }
+                    response.sendRedirect("admin/dashboard");
                     break;
                 case "CLIENT":
-                    response.sendRedirect("product");
+                    response.sendRedirect("client/dashboard");
                     break;
                 default:
                     response.sendRedirect("auth?action=login");
