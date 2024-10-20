@@ -82,7 +82,7 @@ Before running **SilkRoad**, ensure you have the following installed:
    ```bash
    docker-compose up -d
 3. Update the `hibernate.cfg.xml` file in the `resources` directory with your database connection details.
-4. Deploy the application on Apache Tomcat or run it locally via your browser at `http://localhost:8080/SilkRoad`.
+4. Deploy the application on Apache Tomcat or run it locally via your browser at `http://localhost:8081/SilkRoad`.
 
 
 ## 🎉 Get Started with SilkRoad Today!
