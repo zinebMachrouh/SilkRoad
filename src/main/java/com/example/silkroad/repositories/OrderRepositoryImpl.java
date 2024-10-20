@@ -99,4 +99,22 @@ public class OrderRepositoryImpl implements OrderRepository {
             throw new SQLException("Failed to get order by id", e);
         }
     }
+
+
+    @Override
+    public List<Order> getOrdersByClientId(UUID clientId) throws SQLException {
+        try (Session session = sessionFactory.openSession()) {
+            List<Order> orders = session.createQuery(
+                            "from Order o join fetch o.products where o.client.id = :clientId", Order.class)
+                    .setParameter("clientId", clientId)
+                    .list();
+            logger.info("Retrieved {} orders for client id: {}", orders.size(), clientId);
+            return orders;
+        } catch (Exception e) {
+            logger.error("Failed to get orders for client id: {}", clientId, e);
+            throw new SQLException("Failed to get orders for client id", e);
+        }
+    }
+
+
 }

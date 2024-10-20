@@ -3,6 +3,7 @@ package com.example.silkroad.controllers;
 import com.example.silkroad.dto.ClientDTO;
 import com.example.silkroad.dto.OrderDTO;
 import com.example.silkroad.dto.ProductDTO;
+import com.example.silkroad.models.Admin;
 import com.example.silkroad.models.Client;
 import com.example.silkroad.models.enums.OrderStatus;
 import com.example.silkroad.repositories.OrderRepositoryImpl;
@@ -26,10 +27,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
 
 @WebServlet("/order")
 public class OrderController extends HttpServlet {
@@ -46,6 +45,7 @@ public class OrderController extends HttpServlet {
         templateResolver.setTemplateMode("HTML");
         templateResolver.setCharacterEncoding("UTF-8");
         templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
 
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
@@ -53,15 +53,81 @@ public class OrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Redirect to the product page if accessed with a GET request
-        response.sendRedirect(request.getContextPath() + "/product");
+        Object loggedUser = request.getSession().getAttribute("loggedUser");
+
+        // Check if the user is logged in
+        if (loggedUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Check the user's role
+        if (loggedUser instanceof Client) {
+            // The logged-in user is a Client
+            Client client = (Client) loggedUser;
+
+            // Retrieve the orders for the logged-in client
+            List<OrderDTO> orders;
+            try {
+                orders = orderService.getOrdersByClientId(client.getId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            request.setAttribute("orders", orders);
+
+            // Render the order page for Client
+            WebContext context = new WebContext(request, response, getServletContext());
+            context.setVariable("orders", orders);
+            templateEngine.process("client/orders", context, response.getWriter());
+        } else if (loggedUser instanceof Admin) {
+            // The logged-in user is an Admin
+            List<OrderDTO> orders;
+            try {
+                orders = orderService.getAllOrders();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            request.setAttribute("orders", orders);
+
+            // Render the order page for Admin
+            WebContext context = new WebContext(request, response, getServletContext());
+            context.setVariable("orders", orders);
+            templateEngine.process("admin/orders", context, response.getWriter());
+        } else {
+            // Redirect to login for any other role
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Client client = (Client) request.getSession().getAttribute("loggedUser");
+        String action = request.getParameter("action");
 
-        if (client == null || client.getId() == null) {
+        // Perform different actions based on the request parameter "action"
+        if ("add".equalsIgnoreCase(action)) {
+            handleAddOrder(request, response);
+        } else if ("edit".equalsIgnoreCase(action)) {
+            handleEditOrder(request, response);
+        } else if ("delete".equalsIgnoreCase(action)) {
+            handleDeleteOrder(request, response);
+        } else {
+            // Handle invalid action
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action.");
+        }
+    }
+
+    private void handleAddOrder(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Object loggedUser = request.getSession().getAttribute("loggedUser");
+
+        // Check if the logged-in user is a Client
+        if (!(loggedUser instanceof Client)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        Client client = (Client) loggedUser;
+
+        if (client.getId() == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -73,11 +139,7 @@ public class OrderController extends HttpServlet {
         if (productsJson != null && !productsJson.isEmpty()) {
             // Convert the JSON string to a list of IDs
             ObjectMapper objectMapper = new ObjectMapper();
-            productIdList = objectMapper.readValue(productsJson, new TypeReference<List<UUID>>() {
-            });
-            System.out.println("Product IDs from cart: " + productIdList);
-        } else {
-            System.out.println("The cart is empty or not found.");
+            productIdList = objectMapper.readValue(productsJson, new TypeReference<List<UUID>>() {});
         }
 
         // Create a new order
@@ -101,14 +163,64 @@ public class OrderController extends HttpServlet {
             // Add the order using the OrderService
             orderService.addOrder(order);
             // Redirect to the product page after the order is successfully created
-            response.sendRedirect(request.getContextPath() + "/product");
+            response.sendRedirect(request.getContextPath() + "/order");
         } catch (SQLException e) {
             e.printStackTrace();
-
             // Handle error by showing an error message on the same page
             request.setAttribute("errorMessage", "Failed to create order. Please try again.");
             request.getRequestDispatcher("/WEB-INF/templates/order_error.html").forward(request, response);
         }
     }
-}
 
+    private void handleEditOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Logic to edit an order based on order ID and updated status
+        String orderIdParam = request.getParameter("orderId");
+        String statusParam = request.getParameter("status");
+
+        if (orderIdParam == null || statusParam == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Order ID and status are required.");
+            return;
+        }
+
+        UUID orderId = UUID.fromString(orderIdParam);
+        try {
+            // Only allow status updates when the order is still pending
+            OrderDTO order = orderService.getOrderById(orderId);
+            if (order.getStatus().equalsIgnoreCase(OrderStatus.PENDING.name())) {
+                order.setStatus(statusParam);
+                orderService.updateOrder(order);
+                response.sendRedirect(request.getContextPath() + "/order");
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only pending orders can be edited.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to edit the order.");
+        }
+    }
+
+    private void handleDeleteOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Logic to delete an order based on order ID
+        String orderIdParam = request.getParameter("orderId");
+
+        if (orderIdParam == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Order ID is required.");
+            return;
+        }
+
+        UUID orderId = UUID.fromString(orderIdParam);
+        try {
+            // Only allow deletion when the order is still pending
+            OrderDTO order = orderService.getOrderById(orderId);
+            if (order.getStatus().equalsIgnoreCase(OrderStatus.PENDING.name())) {
+                orderService.deleteOrder(orderId);
+                response.sendRedirect(request.getContextPath() + "/order");
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Only pending orders can be deleted.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete the order.");
+        }
+    }
+}

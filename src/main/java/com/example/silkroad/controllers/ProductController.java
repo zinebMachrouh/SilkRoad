@@ -50,7 +50,7 @@ public class ProductController extends HttpServlet {
         context.setVariable("products", products);
 
         response.setContentType("text/html;charset=UTF-8");
-        templateEngine.process("products.html", context, response.getWriter());
+        templateEngine.process("/products/products.html", context, response.getWriter());
 
 
 
@@ -94,12 +94,12 @@ public class ProductController extends HttpServlet {
             // Handle the case where parsing fails
             request.setAttribute("error", "Invalid input for price or stock");
             // Forward the request to the products page to show the error
-            request.getRequestDispatcher("/WEB-INF/templates/products.html").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/templates/products/products.html").forward(request, response);
         } catch (Exception e) {
             // Handle any other exceptions
             e.printStackTrace();
             request.setAttribute("error", "An error occurred while processing the request");
-            request.getRequestDispatcher("/WEB-INF/templates/products.html").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/templates/products/products.html").forward(request, response);
         }
     }
 

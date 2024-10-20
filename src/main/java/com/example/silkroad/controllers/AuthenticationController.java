@@ -42,7 +42,7 @@ public class AuthenticationController extends HttpServlet {
 
         this.userService = new UserServiceImpl(userRepository, clientRepository, adminRepository);
 
-        /*byte[] salt = PasswordUtil.generateSalt();
+        byte[] salt = PasswordUtil.generateSalt();
 
         String hashedPassword = PasswordUtil.hashPassword("super_admin", salt);
 
@@ -52,7 +52,7 @@ public class AuthenticationController extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        */
+
         ThymeLeafUtil thymeleafUtil = new ThymeLeafUtil(getServletContext());
         templateEngine = ThymeLeafUtil.templateEngine;
 

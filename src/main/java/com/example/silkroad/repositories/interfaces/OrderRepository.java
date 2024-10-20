@@ -12,4 +12,5 @@ public interface OrderRepository {
     void deleteOrder(UUID id) throws SQLException;
     List<Order> getAllOrders() throws SQLException;
     Order getOrderById(UUID id) throws SQLException;
+    List<Order> getOrdersByClientId(UUID clientId) throws SQLException;
 }

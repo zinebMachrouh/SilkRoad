@@ -24,13 +24,14 @@ public class Order implements Serializable {
     @Column(name = "status")
     private OrderStatus status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "order_products",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -98,7 +99,9 @@ public class Order implements Serializable {
     }
 
     public void addProduct(Product product) {
-        this.products.add(product);
+        if (!this.products.contains(product)) {
+            this.products.add(product);
+        }
     }
     public void removeProduct(Product product) {
         this.products.remove(product);

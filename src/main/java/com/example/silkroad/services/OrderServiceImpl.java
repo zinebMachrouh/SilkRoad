@@ -35,15 +35,13 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("The order must contain at least one product.");
         }
 
+        order.getProducts().clear();
+
         // Attempt to retrieve each product and add it to the order
         for (ProductDTO productDTO : orderDTO.getProducts()) {
             Product product = productRepository.getProductById(productDTO.getId());
-
             if (product != null) {
-                order.getProducts().add(product);
-                System.out.println("Product added to the order: " + product.getName() + " (ID: " + product.getId() + ")");
-            } else {
-                System.out.println("Product not found: ID " + productDTO.getId());
+                order.addProduct(product); // Make sure to use addProduct() method for controlled insertion
             }
         }
 
@@ -97,4 +95,13 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.getOrderById(id);
         return order != null ? OrderDTO.modelToDTO(order) : null;
     }
+
+    public List<OrderDTO> getOrdersByClientId(UUID clientId) throws SQLException {
+        List<Order> orders = orderRepository.getOrdersByClientId(clientId);
+        orders.forEach(order -> order.getProducts().size());
+        return orders.stream().map(OrderDTO::modelToDTO).collect(Collectors.toList());
+    }
+
+
+
 }

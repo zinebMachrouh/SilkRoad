@@ -14,4 +14,5 @@ public interface OrderService {
     List<OrderDTO> getAllOrders() throws SQLException;
     OrderDTO getOrderById(UUID id) throws SQLException;
 
+    List<OrderDTO> getOrdersByClientId(UUID clientId) throws SQLException;
 }
