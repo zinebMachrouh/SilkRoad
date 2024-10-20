@@ -34,7 +34,8 @@ public class UserDTO {
         this.salt = salt;
     }
 
-    public UserDTO( String name, String email, UserRole role, String shippingAddress, PaymentMethod paymentMethod) {
+    public UserDTO(UUID id, String name, String email, UserRole role, String shippingAddress, PaymentMethod paymentMethod) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;

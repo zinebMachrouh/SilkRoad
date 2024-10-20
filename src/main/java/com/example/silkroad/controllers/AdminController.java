@@ -83,6 +83,7 @@ public class AdminController extends HttpServlet {
             case "/deleteUser":
                 try {
                     deleteUser(req);
+                    resp.sendRedirect("SilkRoad/admin/dashboard");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -100,7 +101,7 @@ public class AdminController extends HttpServlet {
         switch (action) {
             case "/addUser":
                 addUser(req);
-                resp.sendRedirect("/admin/dashboard");
+                resp.sendRedirect("SilkRoad/admin/dashboard");
                 break;
             case "/updateUser":
                 updateUser(req);
@@ -136,10 +137,10 @@ public class AdminController extends HttpServlet {
             users = userService.getAllUsers(offset, limit);
             userDTOs = users.stream().map(user -> {
                 if (user instanceof Admin) {
-                    return new UserDTO(user.getName(), user.getEmail(),UserRole.valueOf("ADMIN"), null, null);
+                    return new UserDTO(user.getId(), user.getName(), user.getEmail(),UserRole.valueOf("ADMIN"), null, null);
                 } else if (user instanceof Client) {
                     Client client = (Client) user;
-                    return new UserDTO(user.getName(), user.getEmail(), UserRole.valueOf("CLIENT"), client.getShippingAddress(), client.getPaymentMethod());
+                    return new UserDTO(user.getId(),user.getName(), user.getEmail(), UserRole.valueOf("CLIENT"), client.getShippingAddress(), client.getPaymentMethod());
                 }
                 return null;
             }).collect(Collectors.toList());
