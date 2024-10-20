@@ -120,7 +120,7 @@ public class AdminController extends HttpServlet {
     private void showDashboard(WebContext ctx, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //ctx.setVariable("users", userService.getAllUsers());
         int offset = 0;
-        int limit = 12;
+        int limit = 9;
 
         String offsetParam = req.getParameter("offset");
         if (offsetParam != null) {

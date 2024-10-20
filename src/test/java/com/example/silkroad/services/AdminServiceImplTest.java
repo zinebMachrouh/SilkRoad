@@ -1,5 +1,5 @@
 package com.example.silkroad.services;
-/*
+
 import com.example.silkroad.dto.AdminDTO;
 import com.example.silkroad.models.Admin;
 import com.example.silkroad.repositories.interfaces.AdminRepository;
@@ -100,4 +100,4 @@ class AdminServiceImplTest {
         verify(adminRepository, times(1)).getAllAdmins();
     }
 }
-*/
+
