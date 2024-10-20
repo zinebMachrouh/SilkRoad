@@ -386,7 +386,9 @@
 
     <form id="orderForm" th:action="@{/order}" method="post" class="hidden">
         <input type="hidden" name="products" id="orderProducts">
+        <input type="hidden" name="action" value="add">
     </form>
+
 
     <div class="overflow-x-auto" style="padding: 0px 40px">
         <table class="min-w-full table-auto border-collapse bg-gray-800 border-gray-700">

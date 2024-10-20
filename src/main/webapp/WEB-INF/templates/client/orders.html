@@ -371,9 +371,7 @@
                         <form th:action="@{/order}" method="post" th:if="${order.status == 'PENDING'}">
                             <select name="status" class="border rounded">
                                 <option value="PENDING" th:selected="${order.status == 'PENDING'}">Pending</option>
-                                <option value="PROCESSING">Processing</option>
-                                <option value="SHIPPED">Shipped</option>
-                                <option value="DELIVERED">Delivered</option>
+                                <option value="CANCELLED">CANCEL</option>
                             </select>
                             <input type="hidden" name="orderId" th:value="${order.id}" />
                             <input type="hidden" name="action" value="edit" />
@@ -395,12 +393,7 @@
 
 
 
-    <div class="pagination">
-        <a th:href="@{/orders(page=${currentPage - 1})}" th:if="${currentPage > 0}">Prev</a>
-        <span th:text="${currentPage + 1}"></span> /
-        <span th:text="${totalPages}"></span>
-        <a th:href="@{/orders(page=${currentPage + 1})}" th:if="${currentPage + 1 < totalPages}">Next</a>
-    </div>
+
 </div>
 
 <!-- Modal for adding a new order -->
