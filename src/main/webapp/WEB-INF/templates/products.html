@@ -5,21 +5,101 @@
     <title>Product Management</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script>
-        // Function to toggle the Add Product modal
-        function toggleAddProductForm() {
-            const modal = document.getElementById('addProductModal');
-            modal.classList.toggle('hidden');
+        // Load cart from localStorage or initialize an empty cart
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Add product to cart
+        function addToCart(button) {
+            const product = {
+                id: button.getAttribute('data-id'),
+                name: button.getAttribute('data-name'),
+            };
+
+            // Check if the product already exists in the cart
+            const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+            if (existingProductIndex === -1) {
+                cart.push(product); // Add new product
+                localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+            } else {
+                alert("Product is already in the cart!");
+            }
+
+            updateCartDisplay();
         }
+
+        // Remove product from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId); // Remove product
+            localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+            updateCartDisplay();
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartContainer = document.getElementById('cart-items');
+            cartContainer.innerHTML = ''; // Clear current display
+
+            if (cart.length === 0) {
+                document.getElementById('cart').classList.add('hidden');
+                return; // Exit if the cart is empty
+            } else {
+                document.getElementById('cart').classList.remove('hidden');
+            }
+
+            cart.forEach(item => {
+                const productDiv = document.createElement('div');
+                productDiv.className = "flex justify-between items-center mb-2 p-2 bg-gray-700 rounded";
+                productDiv.innerHTML = `
+                    ${item.name}
+                    <button onclick="removeFromCart('${item.id}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove</button>
+                `;
+                cartContainer.appendChild(productDiv);
+            });
+        }
+
+        // Function to handle checkout (adjust this if needed)
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            // Prepare the order data with just the IDs
+            const productIdList = cart.map(item => item.id);
+
+            // Convert the product IDs to JSON and set it to the hidden input
+            document.getElementById('orderProducts').value = JSON.stringify(productIdList);
+
+            // Submit the form
+            document.getElementById('orderForm').submit();
+        }
+
+        // Load the cart display on page load
+        window.onload = updateCartDisplay;
+
     </script>
 </head>
 <body class="bg-gray-900 text-gray-100">
-<header class="bg-gray-800 p-4">
+<header class="flex justify-between bg-gray-800 p-4">
     <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold">Product Management</h1>
     </div>
 </header>
-<div class="flex">
 
+<!-- Shopping Cart -->
+<div id="cart" class="bg-gray-800 p-4 rounded-lg mb-4 hidden">
+    <h2 class="text-xl font-bold mb-2">Shopping Cart</h2>
+    <div id="cart-items" class="mb-2"></div>
+    <button onclick="checkout()" class="bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600 mt-2">Checkout</button>
+</div>
+
+<form id="orderForm" th:action="@{/order}" method="post" class="hidden">
+    <input type="hidden" name="products" id="orderProducts">
+</form>
+
+
+<div class="flex">
     <!-- Sidebar -->
     <aside class="bg-gray-800 w-36 p-6">
         <nav>
@@ -41,11 +121,8 @@
     </aside>
 
     <div class="flex-1 p-6">
-
-
         <!-- Main Content -->
         <div id="mainContent">
-            <!-- Top Bar: Search on the left, Add Product on the right -->
             <div class="flex justify-between mb-4">
                 <!-- Search Bar -->
                 <div>
@@ -54,10 +131,7 @@
                 </div>
 
                 <!-- Add Product Button -->
-                <button onclick="toggleAddProductForm()" style="background-color: #FACA50; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; transition: background-color 0.3s;" class="hover:bg-green-600">
-                    Add Product
-                </button>
-
+                <button onclick="toggleAddProductForm()" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">Add Product</button>
             </div>
 
             <!-- Table of Products -->
@@ -102,7 +176,13 @@
                             </td>
                         </form>
 
-                        <!-- Separate Delete Form -->
+                        <td class="border-b border-gray-600 px-2">
+                            <button type="button" class="bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600"
+                                    th:data-id="${product.id}" th:data-name="${product.name}"
+                                    onclick="addToCart(this)">
+                                Add to Cart
+                            </button>
+                        </td>
                         <td class="border-b border-gray-600 px-2">
                             <form th:action="@{/products}" method="post">
                                 <input type="hidden" name="id" th:value="${product.id}">
@@ -144,13 +224,13 @@
                     </div>
 
                     <div>
-                        <label for="image" class="block mb-2">Image Path:</label>
+                        <label for="image" class="block mb-2">Image URL:</label>
                         <input type="text" name="image" id="image" class="p-2 bg-gray-700 text-gray-300 rounded border border-gray-600 w-full" required>
                     </div>
 
                     <div class="flex justify-between">
-                        <button type="button" onclick="toggleAddProductForm()" class="bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600">Cancel</button>
-                        <button type="submit" class="bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600">Add Product</button>
+                        <button type="button" onclick="toggleAddProductForm()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Product</button>
                     </div>
                 </form>
             </div>
@@ -158,5 +238,17 @@
     </div>
 </div>
 
+<!-- Footer -->
+<footer class="bg-gray-800 p-4 text-center">
+    <p class="text-gray-400">© 2024 Product Management. All rights reserved.</p>
+</footer>
+
+<script>
+    // Function to toggle the add product form modal
+    function toggleAddProductForm() {
+        const modal = document.getElementById('addProductModal');
+        modal.classList.toggle('hidden');
+    }
+</script>
 </body>
 </html>

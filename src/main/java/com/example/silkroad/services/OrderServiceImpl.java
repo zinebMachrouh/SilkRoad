@@ -25,14 +25,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrder(OrderDTO orderDTO) throws SQLException {
         Order order = orderDTO.dtoToModel();
+        if (productRepository == null) {
+            System.out.println("ProductRepository is not initialized.");
+            throw new IllegalStateException("ProductRepository is not initialized.");
+        }
+
+        if (orderDTO.getProducts() == null || orderDTO.getProducts().isEmpty()) {
+            System.out.println("No products provided in the order.");
+            throw new IllegalArgumentException("The order must contain at least one product.");
+        }
+
+        // Attempt to retrieve each product and add it to the order
         for (ProductDTO productDTO : orderDTO.getProducts()) {
             Product product = productRepository.getProductById(productDTO.getId());
+
             if (product != null) {
                 order.getProducts().add(product);
+                System.out.println("Product added to the order: " + product.getName() + " (ID: " + product.getId() + ")");
+            } else {
+                System.out.println("Product not found: ID " + productDTO.getId());
             }
         }
-        return orderRepository.addOrder(order);
+
+        // Check if any products were successfully added
+        if (order.getProducts().isEmpty()) {
+            System.out.println("No valid products were added to the order.");
+            throw new IllegalArgumentException("The order does not contain any valid products.");
+        }
+
+        // Save the order to the database
+        Order savedOrder = orderRepository.addOrder(order);
+        System.out.println("Order successfully created with ID: " + savedOrder.getId());
+
+        return savedOrder;
     }
+
+
 
     @Override
     public Order updateOrder(OrderDTO orderDTO) throws SQLException {

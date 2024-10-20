@@ -112,6 +112,9 @@ public class AuthenticationController extends HttpServlet {
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
 
+
+
+
         if (email == null || password == null) {
             logger.warning("Email or password is missing");
         } else {
@@ -124,7 +127,7 @@ public class AuthenticationController extends HttpServlet {
 
             String role = user.getRole();
 
-            logger.info("User role: " + role);
+            session.setAttribute("role", role);
             switch (role) {
 
                 case "ADMIN":
@@ -139,7 +142,7 @@ public class AuthenticationController extends HttpServlet {
                     }
                     break;
                 case "CLIENT":
-                    response.sendRedirect("client");
+                    response.sendRedirect("product");
                     break;
                 default:
                     response.sendRedirect("auth?action=login");

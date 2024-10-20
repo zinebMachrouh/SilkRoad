@@ -33,11 +33,11 @@
             <version>5.6.15.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>5.0.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate</groupId>-->
+<!--            <artifactId>hibernate-ehcache</artifactId>-->
+<!--            <version>5.0.1</version>-->
+<!--        </dependency>-->
 
         <!-- Jakarta Bean Validation (instead of javax.validation) -->
         <dependency>
@@ -93,6 +93,12 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.0</version> <!-- Use the latest version -->
         </dependency>
 
         <!-- PostgreSQL JDBC Driver -->

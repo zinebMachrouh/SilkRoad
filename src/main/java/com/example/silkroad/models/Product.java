@@ -37,8 +37,8 @@ public class Product implements Serializable {
 //    @Column(name = "image", length = 255)
     private String image;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
-//    private List<Order> orders;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "products")
+    private List<Order> orders;
 
     // Default constructor
     public Product() {
