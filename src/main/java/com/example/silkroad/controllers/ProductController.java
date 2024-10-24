@@ -1,6 +1,8 @@
 package com.example.silkroad.controllers;
 
 import com.example.silkroad.dto.ProductDTO;
+import com.example.silkroad.models.Admin;
+import com.example.silkroad.models.Client;
 import com.example.silkroad.models.Product;
 import com.example.silkroad.repositories.ProductRepositoryImpl;
 import com.example.silkroad.services.ProductServiceImpl;
@@ -27,12 +29,13 @@ public class ProductController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        productService = new ProductServiceImpl(new ProductRepositoryImpl(HibernateUtil.getSessionFactory() ),null);
+        productService = new ProductServiceImpl(new ProductRepositoryImpl(HibernateUtil.getSessionFactory()), null);
+
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(getServletContext());
         templateResolver.setTemplateMode("HTML");
         templateResolver.setCharacterEncoding("UTF-8");
         templateResolver.setPrefix("/WEB-INF/templates/");
-
+        templateResolver.setSuffix(".html");
 
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
@@ -40,21 +43,55 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<ProductDTO> products = null;
-        try {
-            products = productService.getAllProducts();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Object loggedUser = request.getSession().getAttribute("loggedUser");
+
+        // Check if the user is logged in
+        if (loggedUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
-        WebContext context = new WebContext(request, response, getServletContext());
-        context.setVariable("products", products);
 
-        response.setContentType("text/html;charset=UTF-8");
-        templateEngine.process("/products/products.html", context, response.getWriter());
+        // Check the user's role
+        if (loggedUser instanceof Client) {
+            // The logged-in user is a Client
+            // Retrieve all products
+            List<ProductDTO> products;
+            try {
+                products = productService.getAllProducts();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
+            // Set products for the client
+            request.setAttribute("products", products);
 
+            // Render the products page for Client
+            WebContext context = new WebContext(request, response, getServletContext());
+            context.setVariable("products", products);
+            templateEngine.process("client/products", context, response.getWriter());
+        } else if (loggedUser instanceof Admin) {
+            // The logged-in user is an Admin
+            // Retrieve all products
+            List<ProductDTO> products;
+            try {
+                products = productService.getAllProducts();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
+            // Set products for the admin
+            request.setAttribute("products", products);
+
+            // Render the products page for Admin
+            WebContext context = new WebContext(request, response, getServletContext());
+            context.setVariable("products", products);
+            templateEngine.process("admin/products", context, response.getWriter());
+        } else {
+            // Redirect to login for any other role
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
     }
+
 
 
     @Override
@@ -93,14 +130,11 @@ public class ProductController extends HttpServlet {
         } catch (NumberFormatException e) {
             // Handle the case where parsing fails
             request.setAttribute("error", "Invalid input for price or stock");
-            // Forward the request to the products page to show the error
             request.getRequestDispatcher("/WEB-INF/templates/products/products.html").forward(request, response);
         } catch (Exception e) {
-            // Handle any other exceptions
             e.printStackTrace();
             request.setAttribute("error", "An error occurred while processing the request");
             request.getRequestDispatcher("/WEB-INF/templates/products/products.html").forward(request, response);
         }
     }
-
 }

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <link rel="icon" th:href="@{/assets/icon.png}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --side: #faca50ff;
+            --jet: #161a1dff;
+            --black: #1d2025ff;
+            --med-black: #22272bff;
+            --light-black: #2a3034ff;
+            --input : #283439ff;
+            --grey: #BDC3C7;
+            --white: #f9f9f9ff;
+            --light: #f1cfeeff;
+            --med: #e297dcff;
+            --hover: #d878d2ff;
+            --main: #d167cbff;
+            --dark: #A85AA6;
+        }
+        body{
+            background-color: var(--black);
+        }
+        .custom-sidebar {
+            background-color: var(--black);
+            width: 270px;
+            padding: 20px;
+            height: 100vh;
+            color: #fff;
+            border-right: var(--grey) 1px solid;
+        }
+
+        .custom-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .custom-sidebar li {
+            margin: 20px 0;
+        }
+
+        .custom-sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-sidebar a:hover {
+            background-color: var(--med-black);
+        }
+
+        .custom-sidebar i {
+            margin-right: 15px;
+            font-size: 1.3rem;
+        }
+
+        .custom-sidebar .active {
+            background-color: var(--med-black);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .user-avatar {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar img {
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Main content styling */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: 2px;
+            right: -1px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            font-size: 0.75rem;
+        }
+
+        .user-initials {
+            background-color: var(--main);
+            color: white;
+            padding: 7px 10px;
+            border-radius: 50%;
+            font-size: 1rem;
+            display: inline-block;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            font-weight: bold;
+        }
+
+        .custom-btn-new-user {
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+        .custom-btn-new-user:hover {
+            background-color: var(--hover);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: var(--med-black);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 550px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--white);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td:not(:last-child) {
+            padding: 12px;
+            text-align: left;
+        }
+        table th,
+        table td:not(:last-child) {
+            border-bottom: 1px solid #333;
+        }
+
+        table th {
+        //background-color: var(--black);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: var(--med-black);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .search{
+            display: flex;
+            align-items: center;
+            background-color: #2A3034;
+            border-radius: 5px;
+            border: var(--grey) 1px solid;
+            overflow: hidden;
+            width: 30%;
+
+            input{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                outline: none;
+                width: 93%;
+                padding: 10px;
+            }
+
+            button{
+                background-color: transparent;
+                color: var(--white);
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                width: 5%;
+            }
+        }
+        .pagination a:hover {
+            background-color: var(--light-black);
+        }
+        .custom-main{
+            background-color: var(--black);
+        }
+
+        .input-group {
+            margin: 25px 0px;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--white);
+            margin-bottom: 4px;
+            text-align: start;
+        }
+
+        .input-group input {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            color: var(--white);
+        }
+        .input-group textarea {
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 0.75rem 1rem;
+            resize: none;
+            color: var(--white);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,.input-group textarea:focus{
+            border-color: var(--main);
+        }
+        .input-group select{
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #BDC3C7;
+            outline: 0;
+            background-color: var(--input);
+            padding: 10px;
+            color: var(--white);
+        }
+        .saveUser{
+            background-color: var(--main);
+            color: var(--black);
+            font-weight: 500;
+        }
+    </style>
+    <script>
+        // Cart functionality (JS)
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function addToCart(button) {
+            const product = {
+                id: button.getAttribute('data-id'),
+                name: button.getAttribute('data-name'),
+            };
+            const existingProductIndex = cart.findIndex(item => item.id === product.id);
+            if (existingProductIndex === -1) {
+                cart.push(product);
+                localStorage.setItem('cart', JSON.stringify(cart));
+            } else {
+                alert("Product is already in the cart!");
+            }
+            updateCartDisplay();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartContainer = document.getElementById('cart-items');
+            cartContainer.innerHTML = '';
+            if (cart.length === 0) {
+                document.getElementById('cart').classList.add('hidden');
+                return;
+            } else {
+                document.getElementById('cart').classList.remove('hidden');
+            }
+            cart.forEach(item => {
+                const productDiv = document.createElement('div');
+                productDiv.className = "flex justify-between items-center mb-2 p-2 bg-gray-700 rounded";
+                productDiv.innerHTML = `${item.name}
+                    <button onclick="removeFromCart('${item.id}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Remove</button>`;
+                cartContainer.appendChild(productDiv);
+            });
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            const productIdList = cart.map(item => item.id);
+            document.getElementById('orderProducts').value = JSON.stringify(productIdList);
+            document.getElementById('orderForm').submit();
+        }
+
+        window.onload = updateCartDisplay;
+    </script>
+</head>
+<body class="text-gray-100 flex">
+
+<!-- Sidebar -->
+<aside class="custom-sidebar fixed">
+    <div class="logo"><img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad</div>
+    <ul>
+        <li>
+            <a th:href="@{/admin/dashboard}" class="active">
+                <i class="bi bi-house-fill"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/product}">
+                <i class="bi bi-box-seam"></i> Product
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/order}">
+                <i class="bi bi-card-list"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-chat-dots-fill"></i> Chat
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/auth(action='logout')}">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="flex-1 ml-64 overflow-y-auto custom-main">
+    <div class="header-content mb-6" style="border-bottom: 1px solid var(--grey); padding: 15px 40px;">
+        <h2>Hello! <span th:text="${name}"></span> &#128075;</h2>
+        <div class="flex items-center">
+            <div class="notification mr-4"><i class="bi bi-bell-fill text-white text-2xl"></i><span class="badge"></span></div>
+            <div class="user-initials" th:text="${initials}"></div>
+        </div>
+    </div>
+
+    <div class="flex justify-between mb-6" style="padding: 0px 40px">
+        <form method="post" class="search">
+            <input type="text" name="search" id="search" placeholder="Let's look for users <3" class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
+            <button class="bi bi-search" type="submit"></button>
+        </form>
+    </div>
+
+    <div id="cart" class="bg-gray-800 p-4 rounded-lg mb-4 hidden">
+        <h2 class="text-xl font-bold mb-2">Shopping Cart</h2>
+        <div id="cart-items" class="mb-2"></div>
+        <button onclick="checkout()" class="bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600 mt-2">Checkout</button>
+    </div>
+
+    <form id="orderForm" th:action="@{/order}" method="post" class="hidden">
+        <input type="hidden" name="products" id="orderProducts">
+        <input type="hidden" name="action" value="add">
+    </form>
+
+
+    <div class="overflow-x-auto" style="padding: 0px 40px">
+        <table class="min-w-full table-auto border-collapse  border-gray-700" style = "background-color: #161a1dff">
+            <thead>
+            <tr class="bg-gray-700 text-gray-400">
+                <th class="px-2 py-2 border-b border-gray-600">Name</th>
+                <th class="px-2 py-2 border-b border-gray-600">Description</th>
+                <th class="px-2 py-2 border-b border-gray-600">Price</th>
+                <th class="px-2 py-2 border-b border-gray-600">Stock</th>
+                <th class="px-2 py-2 border-b border-gray-600">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td class="border-b border-gray-600 px-2 py-2" th:text="${product.name}"></td>
+                <td class="border-b border-gray-600 px-2 py-2" th:text="${product.description}"></td>
+                <td class="border-b border-gray-600 px-2 py-2" th:text="${product.price}"></td>
+                <td class="border-b border-gray-600 px-2 py-2" th:text="${product.stock}"></td>
+            <td class="border-b border-gray-600 px-2">
+                <button type="button" class="bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600" th:data-id="${product.id}" th:data-name="${product.name}" onclick="addToCart(this)">Add to Cart</button>
+            </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>

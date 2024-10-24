@@ -354,12 +354,36 @@
 <aside class="custom-sidebar fixed">
     <div class="logo"><img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad</div>
     <ul>
-        <li><a href="#"><i class="bi bi-house-fill"></i> Dashboard</a></li>
-        <li><a href="#" class="active"><i class="bi bi-box-seam"></i> Product</a></li>
-        <li><a href="#"><i class="bi bi-card-list"></i> Orders</a></li>
-        <li><a href="#"><i class="bi bi-chat-dots-fill"></i> Chat</a></li>
-        <li><a href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
-        <li><a href="/SilkRoad/auth/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        <li>
+            <a th:href="@{/admin/dashboard}" class="active">
+                <i class="bi bi-house-fill"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/product}">
+                <i class="bi bi-box-seam"></i> Product
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/order}">
+                <i class="bi bi-card-list"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-chat-dots-fill"></i> Chat
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/auth(action='logout')}">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </li>
     </ul>
 </aside>
 
@@ -374,7 +398,10 @@
     </div>
 
     <div class="flex justify-between mb-6" style="padding: 0px 40px">
-        <div class="search"><input type="text" placeholder="Search products..." class="p-2 bg-gray-700 text-gray-300 rounded border-gray-600"><button class="bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600">Search</button></div>
+            <form method="post" class="search">
+                <input type="text" name="search" id="search" placeholder="Let's look for users <3" class="w-1/3 custom-search-bar text-gray-300 rounded-lg p-2 ">
+                <button class="bi bi-search" type="submit"></button>
+            </form>
         <button onclick="toggleAddProductForm()" class="bg-yellow-500 text-white px-2 py-2 rounded hover:bg-yellow-600">Add Product</button>
     </div>
 
@@ -391,7 +418,7 @@
 
 
     <div class="overflow-x-auto" style="padding: 0px 40px">
-        <table class="min-w-full table-auto border-collapse bg-gray-800 border-gray-700">
+        <table class="min-w-full table-auto border-collapse  border-gray-700" style = "background-color: #161a1dff">
             <thead>
             <tr class="bg-gray-700 text-gray-400">
                 <th class="px-2 py-2 border-b border-gray-600">Name</th>
@@ -403,14 +430,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="product : ${products}" class="hover:bg-gray-700">
+            <tr th:each="product : ${products}">
                 <form th:action="@{/products}" method="post" class="inline">
                     <input type="hidden" name="id" th:value="${product.id}">
                     <input type="hidden" name="action" value="update">
-                    <td class="border-b border-gray-600 px-2 py-2"><input type="text" name="name" th:value="${product.name}" class="p-2 bg-gray-700 text-gray-300 rounded border-gray-600" required></td>
-                    <td class="border-b border-gray-600 px-2 py-2"><input type="text" name="description" th:value="${product.description}" class="p-2 bg-gray-700 text-gray-300 rounded border-gray-600" required></td>
-                    <td class="border-b border-gray-600 px-2 py-2"><input type="number" name="price" th:value="${product.price}" step="0.01" class="p-2 bg-gray-700 text-gray-300 rounded border-gray-600" required></td>
-                    <td class="border-b border-gray-600 px-2 py-2"><input type="number" name="stock" th:value="${product.stock}" class="p-2 bg-gray-700 text-gray-300 rounded border-gray-600" required></td>
+                    <td class="border-b border-gray-600 px-2 py-2"><input type="text" name="name" th:value="${product.name}" class="p-2 bg-black-700 text-gray-300 rounded border-gray-600" required></td>
+                    <td class="border-b border-gray-600 px-2 py-2"><input type="text" name="description" th:value="${product.description}" class="p-2 bg-black-700 text-gray-300 rounded border-gray-600" required></td>
+                    <td class="border-b border-gray-600 px-2 py-2"><input type="number" name="price" th:value="${product.price}" step="0.01" class="p-2 bg-black-700 text-gray-300 rounded border-gray-600" required></td>
+                    <td class="border-b border-gray-600 px-2 py-2"><input type="number" name="stock" th:value="${product.stock}" class="p-2 bg-black-700 text-gray-300 rounded border-gray-600" required></td>
                     <td class="border-b border-gray-600 px-2 py-2"><img th:src="@{/images/{image}(image=${product.image})}" alt="Product Image" width="50" class="mb-2"></td>
                     <td class="border-b border-gray-600 px-2">
                         <button type="submit" class="bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600">Update</button>

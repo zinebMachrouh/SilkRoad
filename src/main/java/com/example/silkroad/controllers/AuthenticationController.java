@@ -143,26 +143,22 @@ public class AuthenticationController extends HttpServlet {
             String role = user.getRole();
             session.setAttribute("role", role);
             switch (role) {
-
                 case "ADMIN":
-                    response.sendRedirect("admin/dashboard");
+                    response.sendRedirect("product");
                     break;
                 case "CLIENT":
-                    response.sendRedirect("client/dashboard");
+                    response.sendRedirect("product");
                     break;
                 default:
                     response.sendRedirect("auth?action=login");
                     break;
             }
-
-            WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
-            response.setContentType("text/html;charset=UTF-8");
-            templateEngine.process("dashboard", ctx, response.getWriter());
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Invalid email or password");
             showLoginPage(request, response);
         }
     }
+
 
     private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Signup request received");

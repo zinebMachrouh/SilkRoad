@@ -305,22 +305,20 @@
 </head>
 <body class="text-gray-100 flex">
 <aside class="custom-sidebar fixed">
-    <div class="logo">
-        <img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad
-    </div>
+    <div class="logo"><img th:src="@{/assets/icon.png}" alt="icon" style="width: 32px"/> SilkRoad</div>
     <ul>
         <li>
-            <a href="#">
+            <a th:href="@{/admin/dashboard}" class="active">
                 <i class="bi bi-house-fill"></i> Dashboard
             </a>
         </li>
         <li>
-            <a href="#">
-                <i class="bi bi-box-seam"></i> Products
+            <a th:href="@{/product}">
+                <i class="bi bi-box-seam"></i> Product
             </a>
         </li>
         <li>
-            <a href="#" class="active">
+            <a th:href="@{/order}">
                 <i class="bi bi-card-list"></i> Orders
             </a>
         </li>
@@ -335,7 +333,7 @@
             </a>
         </li>
         <li>
-            <a href="/SilkRoad/auth/logout">
+            <a th:href="@{/auth(action='logout')}">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </a>
         </li>
@@ -354,7 +352,6 @@
             <table class="min-w-full bg-white text-gray-800 border">
                 <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">#</th>
                     <th class="py-2 px-4 border-b">Order Date</th>
                     <th class="py-2 px-4 border-b">Client</th>
                     <th class="py-2 px-4 border-b">Status</th>
@@ -363,7 +360,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orders}">
-                    <td th:text="${order.id}"></td>
                     <td th:text="${order.orderDate}"></td>
                     <td th:text="${order.client.name}"></td>
                     <td>

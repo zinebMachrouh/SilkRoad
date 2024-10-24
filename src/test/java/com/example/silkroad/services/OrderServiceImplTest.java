@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static com.example.silkroad.models.enums.OrderStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -84,7 +85,7 @@ class OrderServiceImplTest {
     @Test
     void testDeleteOrder() throws SQLException {
         UUID orderId = UUID.randomUUID();
-        Order order = new Order(orderId, LocalDate.now(), "PENDING", null);
+        Order order = new Order(orderId, LocalDate.now(), PENDING, null);
 
         when(orderRepository.getOrderById(orderId)).thenReturn(order);
 
@@ -95,8 +96,8 @@ class OrderServiceImplTest {
 
     @Test
     void testGetAllOrders() throws SQLException {
-        Order order1 = new Order(UUID.randomUUID(), LocalDate.now(), "PENDING", null);
-        Order order2 = new Order(UUID.randomUUID(), LocalDate.now(), "COMPLETED", null);
+        Order order1 = new Order(UUID.randomUUID(), LocalDate.now(), PENDING, null);
+        Order order2 = new Order(UUID.randomUUID(), LocalDate.now(), SHIPPED, null);
         List<Order> orderList = Arrays.asList(order1, order2);
 
         when(orderRepository.getAllOrders()).thenReturn(orderList);
@@ -110,7 +111,7 @@ class OrderServiceImplTest {
     @Test
     void testGetOrderById() throws SQLException {
         UUID orderId = UUID.randomUUID();
-        Order order = new Order(orderId, LocalDate.now(), "PENDING", null);
+        Order order = new Order(orderId, LocalDate.now(), PENDING, null);
 
         when(orderRepository.getOrderById(orderId)).thenReturn(order);
 
@@ -124,7 +125,7 @@ class OrderServiceImplTest {
     @Test
     void testGetOrdersByClientId() throws SQLException {
         UUID clientId = UUID.randomUUID();
-        Order order = new Order(UUID.randomUUID(), LocalDate.now(), "PENDING", null);
+        Order order = new Order(UUID.randomUUID(), LocalDate.now(), PENDING, null);
         List<Order> orders = Arrays.asList(order);
 
         when(orderRepository.getOrdersByClientId(clientId)).thenReturn(orders);
